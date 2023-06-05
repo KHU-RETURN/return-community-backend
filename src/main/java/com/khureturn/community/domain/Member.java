@@ -1,7 +1,8 @@
 package com.khureturn.community.domain;
 
-
-
+import com.khureturn.community.domain.base.BaseEntity;
+import com.khureturn.community.domain.common.ManagerStatus;
+import com.khureturn.community.domain.common.RoleStatus;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryComment;
 import com.khureturn.community.domain.diary.DiaryLike;
@@ -13,25 +14,31 @@ import com.khureturn.community.domain.notice.Notice;
 import com.khureturn.community.domain.notice.NoticeLike;
 import com.khureturn.community.domain.notice.NoticeScrap;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@NoArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
-    private Long id;
+    private Long memberId;
+
+    @Column(unique = true, nullable = false)
     private String studentId;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(unique = true, nullable = false)
     private String phoneNumber;
     private String profileImg;
 
@@ -41,7 +48,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private RoleStatus roleStatus;
     private boolean isPaid;
-    private LocalDateTime memberCreateDate;
 
     @OneToMany(mappedBy ="member")
     private List<Diary> diarys = new ArrayList<>();
@@ -73,13 +79,5 @@ public class Member {
     @OneToMany(mappedBy ="member")
     private List<NoticeScrap> noticeScraps = new ArrayList<>();
 
-    @Builder
-    public Member(String studentId, String name, String email, String phoneNumber, String profileImg){
-        this.studentId = studentId;
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.profileImg = profileImg;
-    }
 
 }

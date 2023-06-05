@@ -1,37 +1,20 @@
 package com.khureturn.community.service;
 
+import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
-import com.khureturn.community.repository.DiaryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.khureturn.community.domain.diary.DiaryFile;
+import com.khureturn.community.dto.DiaryRequestDto;
+
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class DiaryService {
-    @Autowired
-    private DiaryRepository diaryRepository;
+public interface DiaryService {
 
-    public void saveDiary(Diary diary){
-        diaryRepository.save(diary);
-    }
+    Diary create(DiaryRequestDto.CreateDiaryDto request, Member member);
+    public DiaryFile create(DiaryRequestDto.CreateDiaryDto request, Diary diary);
+    Long update(Long diaryId, DiaryRequestDto.UpdateDiaryDto request);
+    void delete(Long diaryId);
+    Diary findById(Long diaryId);
 
-    @Transactional
-    public Long update(Long id){
-        Diary diary = diaryRepository.findById(id)
-                .orElseThrow(() -> new
-                        IllegalArgumentException("해당 일기장이 존재하지 않습니다."));
-        diary.update(diary.getDiary_title(), diary.getDiary_content());
-        return id;
-    }
-
-    public List<Diary> findDiary() {return diaryRepository.findAll();}
-    public Optional<Diary> findById(Long id) {return diaryRepository.findById(id);}
-
-    public Long deleteDiary(Long id) {
-        diaryRepository.deleteById(id);
-        return id;
-    }
-
+    List<Diary> findAll();
+    List<Diary> findAllByMember(Member member);
 }

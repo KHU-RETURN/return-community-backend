@@ -1,22 +1,25 @@
 package com.khureturn.community.domain.notice;
 
 import com.khureturn.community.domain.Member;
-import com.khureturn.community.domain.notice.Notice;
+import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class NoticeFile {
+public class NoticeFile extends BaseEntity {
 
     @Id
     @GeneratedValue
     @Column(name = "notice_file_id")
     private Long id;
 
-    private String notice_file_name;
-    private String notice_file_url;
-    private String notice_file_size;
+    private String noticeFileName;
+    private String noticeFileUrl;
+    private String noticeFileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="notice_id")

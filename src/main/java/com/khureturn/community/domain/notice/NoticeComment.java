@@ -1,22 +1,23 @@
 package com.khureturn.community.domain.notice;
 
 import com.khureturn.community.domain.Member;
-import com.khureturn.community.domain.notice.Notice;
+import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class NoticeComment {
+public class NoticeComment extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "notice_comment_id")
     private Long id;
 
-    private String notice_context;
-    private LocalDateTime comment_date;
+    private String noticeCommentContext;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="notice_id")

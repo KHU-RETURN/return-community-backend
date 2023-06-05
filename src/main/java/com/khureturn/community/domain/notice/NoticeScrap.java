@@ -1,11 +1,13 @@
 package com.khureturn.community.domain.notice;
 
 import com.khureturn.community.domain.Member;
-import com.khureturn.community.domain.notice.Notice;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class NoticeScrap {
     @Id

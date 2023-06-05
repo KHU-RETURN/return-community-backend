@@ -1,11 +1,13 @@
 package com.khureturn.community.domain.diary;
 
 import com.khureturn.community.domain.Member;
-import com.khureturn.community.domain.diary.Diary;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class DiaryScrap {
 
@@ -20,5 +22,4 @@ public class DiaryScrap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
 }

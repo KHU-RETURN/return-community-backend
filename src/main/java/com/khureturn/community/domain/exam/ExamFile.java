@@ -1,20 +1,23 @@
 package com.khureturn.community.domain.exam;
 
-import com.khureturn.community.domain.exam.Exam;
+import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ExamFile {
+public class ExamFile extends BaseEntity{
     @Id
     @GeneratedValue
     @Column(name = "exam_file_id")
     private Long id;
 
-    private String exam_file_name;
-    private String exam_file_url;
-    private String exam_file_size;
+    private String examFileName;
+    private String examFileUrl;
+    private String examFileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="exam_id")

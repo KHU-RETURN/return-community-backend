@@ -1,28 +1,35 @@
 package com.khureturn.community.domain.diary;
 
 import com.khureturn.community.domain.Member;
+import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@NoArgsConstructor
-public class Diary {
+public class Diary extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "diary_id")
     private Long id;
-    private String diary_title;
-    private String diary_content;
 
-    private int diary_like_count;
-    private int diary_scrap_count;
-    private LocalDateTime diary_create_date;
+    @Column(nullable = false)
+    private String diaryTitle;
+    private String diaryContent;
+
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Long diaryLikeCount;
+
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Long diaryScrapCount;
+    private Long diaryCommentCount;
+
+    private Boolean isAnonymous;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menber_id")
@@ -38,17 +45,11 @@ public class Diary {
     private List<DiaryScrap> diaryScraps = new ArrayList<>();
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryComment> diaryComments = new ArrayList<>();
-    @Builder
-    public Diary(String diary_title, String diary_content, int diary_like_count, int diary_scrap_count){
-        this.diary_title = diary_title;
-        this.diary_content = diary_content;
-        diary_like_count=0;
-        diary_scrap_count=0;
-    }
 
-    public void update(String diary_title, String diary_content){
-        this.diary_title = diary_title;
-        this.diary_content = diary_content;
+    public void update(String diaryTitle, String diaryContent, Boolean isAnonymous){
+        this.diaryTitle=diaryTitle;
+        this.diaryContent=diaryContent;
+        this.isAnonymous=isAnonymous;
     }
 
 }

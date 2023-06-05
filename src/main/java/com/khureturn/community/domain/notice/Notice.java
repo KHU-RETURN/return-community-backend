@@ -1,25 +1,31 @@
 package com.khureturn.community.domain.notice;
 
 import com.khureturn.community.domain.Member;
+import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-
-import java.time.LocalDateTime;
+import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Notice {
+public class Notice extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "notice_id")
     private Long id;
-    private String notice_title;
-    private String notice_content;
-    private boolean notice_pin_status;
-    private LocalDateTime notice_create_date;
-    private int notice_like_count;
-    private int notice_scrap_count;
+    @Column(nullable = false)
+    private String noticeTitle;
+    private String noticeContent;
+    private boolean noticePinStatus;
+
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private int noticeLikeCount;
+
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private int noticeScrapCount;
 
     @OneToMany(mappedBy ="notice")
     private List<NoticeFile> noticeFiles = new ArrayList<>();
