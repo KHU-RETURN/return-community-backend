@@ -15,6 +15,8 @@ import com.khureturn.community.domain.notice.NoticeLike;
 import com.khureturn.community.domain.notice.NoticeScrap;
 import jakarta.persistence.*;
 import lombok.*;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,10 @@ public class Member extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String studentId;
 
+
+    @Column(unique = true, nullable = false)
+    private String googleSub;
+
     @Column(nullable = false)
     private String name;
 
@@ -47,6 +53,7 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private RoleStatus roleStatus;
+
     private boolean isPaid;
 
     @OneToMany(mappedBy ="member")
@@ -78,6 +85,8 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy ="member")
     private List<NoticeScrap> noticeScraps = new ArrayList<>();
+
+
 
 
 }
