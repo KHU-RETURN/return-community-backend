@@ -58,7 +58,11 @@ public class DiaryServiceImpl implements DiaryService{
 
     @Override
     public List<Diary> findAllByMember(Member member){
+<<<<<<< HEAD
         List<Diary> diaries = diaryRepository.findAllByMemberId(member.getMemberId());
+=======
+        List<Diary> diaries = diaryRepository.findAllByMember(member.getMemberId());
+>>>>>>> f3efc04018e9c94e60ee77a0deb5d92d7c626e2e
         return diaries;
 
     }

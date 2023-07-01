@@ -32,7 +32,11 @@ public class Diary extends BaseEntity {
     private Boolean isAnonymous;
 
     @ManyToOne(fetch = FetchType.LAZY)
+<<<<<<< HEAD
     @JoinColumn(name = "menber_id")
+=======
+    @JoinColumn(name = "member_id")
+>>>>>>> f3efc04018e9c94e60ee77a0deb5d92d7c626e2e
     private Member member;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
