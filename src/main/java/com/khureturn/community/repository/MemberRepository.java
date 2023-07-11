@@ -1,8 +1,6 @@
 package com.khureturn.community.repository;
 
 import com.khureturn.community.domain.Member;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -21,6 +19,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Boolean existsByEmail(String email);
 
+<<<<<<< HEAD
 
+=======
+    Optional<Member> findByPhoneNumber(String phoneNumber);
+>>>>>>> f4de3852aba08c6b1fc00f0251e4e0564eec9985
 
 }

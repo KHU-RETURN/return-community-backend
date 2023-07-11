@@ -16,10 +16,10 @@ public class DiaryLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="diary_id")
-    private Diary diary;
+    private Diary diaryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
-    private Member member;
+    private Member memberId;
 
 }

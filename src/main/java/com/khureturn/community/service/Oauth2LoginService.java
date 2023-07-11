@@ -116,13 +116,13 @@ public class Oauth2LoginService {
 
             redisService.setDataWithExpiration(dto.getGoogldSub(), accessToken, expireTime);
             Member member = userRepository.findByGoogleSub(dto.getGoogldSub()).get();
-            MemberResponseDto.MemberDto memberDto = MemberResponseDto.MemberDto.builder()
+            MemberResponseDto.GoogleAccountInfoDto googleAccountInfoDto = MemberResponseDto.GoogleAccountInfoDto.builder()
                     .memberId(member.getMemberId())
                     .profileImgURL(member.getProfileImg())
                     .name(member.getName())
                     .phoneNumber(member.getPhoneNumber())
                     .build();
-            return new ResponseEntity<MemberResponseDto.MemberDto>(memberDto, httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<MemberResponseDto.GoogleAccountInfoDto>(googleAccountInfoDto, httpHeaders, HttpStatus.OK);
         }
     }
 }

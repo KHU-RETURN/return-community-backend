@@ -43,4 +43,6 @@ public class DiaryController {
         return ResponseEntity.ok(DiaryConverter.toDiaryDto(diary));
     }
 
+
+
 }
