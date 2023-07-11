@@ -28,3 +28,14 @@ spring:
       enabled: true
       path: /console
 
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+
+server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/plain,text/css,application/javascript,application/json, application/zip, application/octet-stream
+
+
