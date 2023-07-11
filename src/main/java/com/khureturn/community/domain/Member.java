@@ -13,6 +13,7 @@ import com.khureturn.community.domain.exam.ExamScrap;
 import com.khureturn.community.domain.notice.Notice;
 import com.khureturn.community.domain.notice.NoticeLike;
 import com.khureturn.community.domain.notice.NoticeScrap;
+import com.khureturn.community.dto.MemberRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -55,6 +56,21 @@ public class Member extends BaseEntity {
     private RoleStatus roleStatus;
 
     private boolean isPaid;
+
+
+
+    public void transferSignUpDtoToMember(MemberRequestDto.SignUpRequestDto signUpRequestDto, String profileImg){
+        this.studentId = String.valueOf(signUpRequestDto.getStudentId());
+        this.googleSub = signUpRequestDto.getGoogleSub();
+        this.name = signUpRequestDto.getName();
+        this.email = signUpRequestDto.getEmail();
+        this.phoneNumber = signUpRequestDto.getPhoneNumber();
+        this.profileImg = profileImg;
+        this.managerStatus = null;
+        this.roleStatus = RoleStatus.ASSOCIATE;
+        this.isPaid = false;
+    }
+
 
     @OneToMany(mappedBy ="member")
     private List<Diary> diarys = new ArrayList<>();

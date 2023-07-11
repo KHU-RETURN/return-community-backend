@@ -1,0 +1,58 @@
+package com.khureturn.community.controller;
+
+import com.khureturn.community.exception.authentication.AlreadyLoginException;
+import com.khureturn.community.service.MemberService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.Principal;
+
+
+
+@Slf4j
+@RequiredArgsConstructor
+@RestController
+public class MemberController {
+
+    private final MemberService memberService;
+
+
+    @GetMapping("/validate-phone-number/{phoneNumber}")
+    public ResponseEntity<Void> validatePhoneNumber(Principal principal, @PathVariable String phoneNumber) {
+        String username = null;
+        if (principal != null) {
+            username = principal.getName();
+        }
+        memberService.validatePhoneNumber(phoneNumber, username);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/validate-email/{email}")
+    public ResponseEntity<Void> validateEmail(Principal principal, @PathVariable String email) {
+        String username = null;
+        if (principal != null) {
+            username = principal.getName();
+        }
+        memberService.validateEmail(email, username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/sign-up", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> signUp(
+            Principal principal,
+            @RequestPart String signUpRequest,
+            @RequestPart(required = false) MultipartFile profileImg,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        if (principal != null) throw new AlreadyLoginException();
+        return memberService.signUp(signUpRequest, profileImg, httpServletRequest, httpServletResponse);
+    }
+}
