@@ -12,15 +12,13 @@ public enum ErrCode {
     NO_PERMISSION("BSE004", "해당 기능에 대한 권한이 없습니다."),
     BAD_REQUEST("RE005", "클라이언트 요청오류."),
     NO_SUCH_USER("RE006", "해당 유저를 찾을 수 없습니다."),
-    INVALID_NICKNAME_FORMAT("RE007", "닉네임 형식이 잘못되었습니다."),
     INVALID_PHONE_NUMBER_FORMAT("RE008", "전화번호 형식이 잘못되었습니다."),
     INVALID_EMAIL_FORMAT("RE009", "이메일 형식이 잘못되었습니다."),
     INVALID_USER_ROLE("RE010", "유저 형식이 잘못되었습니다."),
-    DUPLICATED_NICKNAME("RE011", "사용중인 닉네임입니다."),
     DUPLICATED_PHONE_NUMBER("RE012", "사용중인 전화번호입니다."),
     DUPLICATED_EMAIL("RE013", "사용중인 이메일입니다."),
 
-
+    INVALID_MEDIA_TYPE("RE014", "허용되지 않은 미디어 타입"),
 
 
     INTERNAL_SERVER_ERROR("RE500", "서버 요청 처리 실패.");
