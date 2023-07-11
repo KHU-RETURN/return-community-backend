@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Notice extends BaseEntity {
+public class  Notice extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "notice_id")
     private Long id;

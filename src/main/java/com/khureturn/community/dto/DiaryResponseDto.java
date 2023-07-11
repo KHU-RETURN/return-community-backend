@@ -7,6 +7,7 @@ import java.util.List;
 
 public class DiaryResponseDto {
 
+
     @Builder
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,7 +47,7 @@ public class DiaryResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateDiaryDto {
-        private Long DiaryId;
+        private Long postId;
     }
 
     @Builder
@@ -54,7 +55,7 @@ public class DiaryResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UpdateDiaryDto {
-        private Long DiaryId;
+        private Long postId;
     }
 
 

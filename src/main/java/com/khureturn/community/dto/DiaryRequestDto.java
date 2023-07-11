@@ -15,12 +15,9 @@ public class DiaryRequestDto {
 
     @Getter
     public static class CreateDiaryDto{
-
-        private String media;
         private String title;
         private String content;
         private Boolean isAnonymous;
-        private LocalDateTime eventDate;
         private Integer thumbnailIndex;
 
     }

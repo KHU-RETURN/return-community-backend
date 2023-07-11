@@ -3,32 +3,38 @@ package com.khureturn.community.dto;
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryFile;
+import com.khureturn.community.service.DiaryFileService;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DiaryConverter {
 
-    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request, Member member){
+    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request){
         return Diary.builder()
                 .diaryTitle(request.getTitle())
                 .diaryContent(request.getContent())
                 .isAnonymous(request.getIsAnonymous())
-                .member(member)
+                .thumbnailIndex(request.getThumbnailIndex())
                 .build();
     }
-    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, Diary diary){
+    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, String media){
         return DiaryFile.builder()
                 .diaryThumb(request.getThumbnailIndex())
-                .diaryOriginalUrl(request.getMedia())
-                .diary(diary)
+                .diaryOriginalUrl(media)
                 .build();
     }
 
-    public static DiaryResponseDto.DiaryDto toDiaryDto(Diary diary){
+    public static DiaryResponseDto.DiaryDto toDiaryDto(Diary diary, DiaryFile diaryFile){
         return DiaryResponseDto.DiaryDto.builder()
-                .diaryId(diary.getId())
+                .isLiked()
+                .isBookmarked()
+                .member()
                 .title(diary.getDiaryTitle())
                 .content(diary.getDiaryContent())
+                .mediaList(diaryFile.getDiaryOriginalUrl())
+                .viewCount(diary.getDiaryViewCount())
                 .isAnonymous(diary.getIsAnonymous())
                 .bookmarkedCount(diary.getDiaryScrapCount())
                 .commentCount(diary.getDiaryCommentCount())
@@ -48,6 +54,7 @@ public class DiaryConverter {
                 .size(diaries.size())
                 .build();
     }
+
 
 
 }

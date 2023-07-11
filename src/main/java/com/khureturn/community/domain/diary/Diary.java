@@ -22,21 +22,22 @@ public class Diary extends BaseEntity {
     private String diaryTitle;
     private String diaryContent;
 
+    private Boolean isAnonymous;
+
+    private int thumbnailIndex;
+
     @Column(columnDefinition = "INT DEFAULT 0")
     private Long diaryLikeCount;
 
     @Column(columnDefinition = "INT DEFAULT 0")
     private Long diaryScrapCount;
+
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Long diaryViewCount;
     private Long diaryCommentCount;
 
-    private Boolean isAnonymous;
-
     @ManyToOne(fetch = FetchType.LAZY)
-<<<<<<< HEAD
-    @JoinColumn(name = "menber_id")
-=======
     @JoinColumn(name = "member_id")
->>>>>>> f3efc04018e9c94e60ee77a0deb5d92d7c626e2e
     private Member member;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
