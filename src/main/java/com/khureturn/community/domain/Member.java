@@ -56,7 +56,6 @@ public class Member extends BaseEntity {
     private boolean isPaid;
 
 
-
     public void transferSignUpDtoToMember(MemberRequestDto.SignUpRequestDto signUpRequestDto, String profileImg){
         this.studentId = String.valueOf(signUpRequestDto.getStudentId());
         this.googleSub = signUpRequestDto.getGoogleSub();

@@ -26,34 +26,34 @@ public class DiaryConverter {
                 .build();
     }
 
-    public static DiaryResponseDto.DiaryDto toDiaryDto(Diary diary, DiaryFile diaryFile){
-        return DiaryResponseDto.DiaryDto.builder()
-                .isLiked()
-                .isBookmarked()
-                .member()
-                .title(diary.getDiaryTitle())
-                .content(diary.getDiaryContent())
-                .mediaList(diaryFile.getDiaryOriginalUrl())
-                .viewCount(diary.getDiaryViewCount())
-                .isAnonymous(diary.getIsAnonymous())
-                .bookmarkedCount(diary.getDiaryScrapCount())
-                .commentCount(diary.getDiaryCommentCount())
-                .createdDate(diary.getCreatedAt())
-                .build();
-    }
+//    public static DiaryResponseDto.DiaryDto toDiaryDto(Diary diary){
+//        return DiaryResponseDto.DiaryDto.builder()
+//                .isLiked()
+//                .isBookmarked()
+//                .member()
+//                .title(diary.getDiaryTitle())
+//                .content(diary.getDiaryContent())
+//                .mediaList(diaryFile.getDiaryOriginalUrl())
+//                .viewCount(diary.getDiaryViewCount())
+//                .isAnonymous(diary.getIsAnonymous())
+//                .bookmarkedCount(diary.getDiaryScrapCount())
+//                .commentCount(diary.getDiaryCommentCount())
+//                .createdDate(diary.getCreatedAt())
+//                .build();
+//    }
 
-    public static List<DiaryResponseDto.DiaryDto> toDiaryDtoList(List<Diary> diaries){
-        return diaries.stream()
-                .map(diary -> toDiaryDto(diary))
-                .collect(Collectors.toList());
-    }
+//    public static List<DiaryResponseDto.DiaryDto> toDiaryDtoList(List<Diary> diaries){
+//        return diaries.stream()
+//                .map(diary -> toDiaryDto(diary))
+//                .collect(Collectors.toList());
+//    }
 
-    public static DiaryResponseDto.DiaryListDto toDiaryListDto(List<Diary> diaries){
-        return DiaryResponseDto.DiaryListDto.builder()
-                .diaryDtoList(toDiaryDtoList(diaries))
-                .size(diaries.size())
-                .build();
-    }
+//    public static DiaryResponseDto.DiaryListDto toDiaryListDto(List<Diary> diaries){
+//        return DiaryResponseDto.DiaryListDto.builder()
+//                .diaryDtoList(toDiaryDtoList(diaries))
+//                .size(diaries.size())
+//                .build();
+//    }
 
 
 

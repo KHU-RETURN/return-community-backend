@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface DiaryLikeRepository extends JpaRepository<DiaryLike, Long> {
-    boolean existsDiaryLikesByMemberIdAndDiaryId(Member memberId, Diary diaryId);
+    boolean existsDiaryLikeByMemberAndDiary(Long memberId, Long diaryId);
 
-    Optional<DiaryLike> findByMemberIdAndDiaryId(Member memberId, Diary diaryId);
+    Optional<DiaryLike> findByMemberAndDiary(Long memberId, Long diaryId);
 }

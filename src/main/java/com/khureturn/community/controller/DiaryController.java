@@ -37,11 +37,11 @@ public class DiaryController {
         return ResponseEntity.ok(DiaryResponseDto.UpdateDiaryDto.builder().postId(diary.getId()).build());
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<DiaryResponseDto.DiaryDto> getDiary(@PathVariable(name = "postId") Long postId){
-        Diary diary = diaryService.findById(postId);
-        return ResponseEntity.ok(DiaryConverter.toDiaryDto(diary));
-    }
+//    @GetMapping("/{postId}")
+//    public ResponseEntity<DiaryResponseDto.DiaryDto> getDiary(@PathVariable(name = "postId") Long postId){
+//        Diary diary = diaryService.findById(postId);
+//        return ResponseEntity.ok(DiaryConverter.toDiaryDto(diary));
+//    }
 
 
 
