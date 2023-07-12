@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class Oauth2LoginService {
+public class AccountService {
 
     private final MemberRepository userRepository;
 
@@ -124,5 +124,22 @@ public class Oauth2LoginService {
                     .build();
             return new ResponseEntity<MemberResponseDto.GoogleAccountInfoDto>(googleAccountInfoDto, httpHeaders, HttpStatus.OK);
         }
+    }
+
+
+    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+
+        String getAccessToken = jwtTokenProvider.extractAccessTokenFromCookie(httpServletRequest);
+
+        String username = jwtTokenProvider.getUsername(getAccessToken);
+
+        Cookie cookie= new Cookie("authorization", null);
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        httpServletResponse.addCookie(cookie);
+
+        Long expiration = jwtTokenProvider.getExpireTime(getAccessToken);
+        redisService.setBlackListToken(getAccessToken, "BLACKLIST_ACCESSTOKEN_" + username, expiration);
     }
 }

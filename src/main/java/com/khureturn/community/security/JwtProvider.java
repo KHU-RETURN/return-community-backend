@@ -50,14 +50,10 @@ public class JwtProvider {
 
 
 
-    public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException, ServletException {
-        return Optional.ofNullable(request.getHeader(accessHeader)).filter(accessToken -> accessToken.startsWith(BEARER)).map(accessToken -> accessToken.replace(BEARER, ""));
-    }
+//    public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException, ServletException {
+//        return Optional.ofNullable(request.getHeader(accessHeader)).filter(accessToken -> accessToken.startsWith(BEARER)).map(accessToken -> accessToken.replace(BEARER, ""));
+//    }
 
-
-    public Optional<String> extractAccessToken(String request) throws IOException {
-        return Optional.ofNullable(request).filter(refreshToken -> refreshToken.startsWith(BEARER)).map(refreshToken -> refreshToken.replace(BEARER, ""));
-    }
 
     public String extractAccessTokenFromCookie(HttpServletRequest httpServletRequest) throws IOException{
         Cookie[] cookies = httpServletRequest.getCookies();
@@ -71,12 +67,6 @@ public class JwtProvider {
         }
         return null;
     }
-
-
-    public Optional<String> extractRefreshToken(String request) throws IOException {
-        return Optional.ofNullable(request).filter(refreshToken -> refreshToken.startsWith(BEARER)).map(refreshToken -> refreshToken.replace(BEARER, ""));
-    }
-
 
     public Long getExpireTime(String token) {
         Date expirationDate =  Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getExpiration();
