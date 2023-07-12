@@ -1,6 +1,7 @@
 package com.khureturn.community.controller;
 
 import com.khureturn.community.exception.authentication.AlreadyLoginException;
+import com.khureturn.community.service.AccountService;
 import com.khureturn.community.service.MemberService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +25,9 @@ import java.security.Principal;
 public class MemberController {
 
     private final MemberService memberService;
+
+    private final AccountService accountService;
+
 
 
     @GetMapping("/validate-phone-number/{phoneNumber}")
@@ -54,5 +59,12 @@ public class MemberController {
             HttpServletResponse httpServletResponse) throws ServletException, IOException {
         if (principal != null) throw new AlreadyLoginException();
         return memberService.signUp(signUpRequest, profileImg, httpServletRequest, httpServletResponse);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sign-out")
+    public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+        accountService.logout(httpServletRequest, httpServletResponse);
+        return ResponseEntity.ok().build();
     }
 }

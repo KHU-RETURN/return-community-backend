@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class Oauth2LoginService {
+public class AccountService {
 
     private final MemberRepository userRepository;
 
@@ -127,9 +127,9 @@ public class Oauth2LoginService {
     }
 
 
-    public void logout(String accessToken, HttpServletResponse httpServletResponse) throws IOException {
+    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 
-        String getAccessToken = jwtTokenProvider.extractAccessToken(accessToken).orElse(null);
+        String getAccessToken = jwtTokenProvider.extractAccessTokenFromCookie(httpServletRequest);
 
         String username = jwtTokenProvider.getUsername(getAccessToken);
 

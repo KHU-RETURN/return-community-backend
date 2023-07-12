@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//모든 서�
             return;
         }
 
-        String accessToken = jwtProvider.extractAccessToken(request).orElse(null);
+        String accessToken = jwtProvider.extractAccessTokenFromCookie(request);
         boolean isAccessToken = false;
         if (accessToken != null) {
             try {
