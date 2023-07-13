@@ -17,8 +17,8 @@ public class DiaryCommentService {
 
     private final DiaryCommentRepository diaryCommentRepository;
 
-    public DiaryComment create(Long postId, DiaryCommentRequestDto.CreateCommentDto request){
-        Diary diary = diaryRepository.findById(postId).get();
+    public DiaryComment create(Long diaryId, DiaryCommentRequestDto.CreateCommentDto request){
+        Diary diary = diaryRepository.findById(diaryId).get();
 
         DiaryComment diaryComment = DiaryComment.builder()
                 .diaryCommentContent(request.getContent())
@@ -26,8 +26,8 @@ public class DiaryCommentService {
         return diaryCommentRepository.save(diaryComment);
     }
 
-    public DiaryComment update(Long postId, Long commentId, DiaryCommentRequestDto.UpdateCommentDto request){
-        DiaryComment diaryComment = diaryCommentRepository.findDiaryCommentByDiaryAndDiaryComment(postId, commentId);
+    public DiaryComment update(Long diaryId, Long diaryCommentId, DiaryCommentRequestDto.UpdateCommentDto request){
+        DiaryComment diaryComment = diaryCommentRepository.findDiaryCommentByDiaryAndDiaryComment(diaryId, diaryCommentId).get();
         diaryComment.update(request.getContent());
         return diaryComment;
     }
