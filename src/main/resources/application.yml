@@ -5,6 +5,7 @@ spring:
     password: ${LOCAL_DB_PASSWORD}
     driver-class-name: org.h2.Driver
 
+
 #spring:
 #  datasource:
 #    driver-class-name: org.h2.Driver  # Database를 H2로 사용하겠다.

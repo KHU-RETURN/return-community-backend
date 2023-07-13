@@ -7,6 +7,7 @@ import com.khureturn.community.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -18,18 +19,18 @@ public class DiaryScrapController {
     private final DiaryScrapService diaryScrapService;
     private final MemberService memberService;
 
-//    @PostMapping("/{postId}/bookmark")
-//    public ResponseEntity<Void> createLike(@PathVariable(name = "postId")Long postId){
-//        Member memberId =
-//        diaryScrapService.diaryScrap(postId, memberId);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @DeleteMapping("/{postId}/bookmark")
-//    public ResponseEntity<Void> deleteLike(@PathVariable(name = "postId")Long postId){
-//        Member memberId =
-//        diaryScrapService.diaryUnScrap(postId, memberId);
-//        return ResponseEntity.ok().build();
-//    }
+    @PostMapping("/{postId}/bookmark")
+    public ResponseEntity<Void> createLike(@PathVariable(name = "postId")Long postId, @AuthenticationPrincipal Member member){
+        Member member1 = member;
+        diaryScrapService.diaryScrap(postId, member1);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{postId}/bookmark")
+    public ResponseEntity<Void> deleteLike(@PathVariable(name = "postId")Long postId, @AuthenticationPrincipal Member member){
+        Member member1 = member;
+        diaryScrapService.diaryUnScrap(postId, member1);
+        return ResponseEntity.ok().build();
+    }
 
 }

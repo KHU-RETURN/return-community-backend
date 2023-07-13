@@ -2,7 +2,7 @@ package com.khureturn.community.controller;
 
 import com.khureturn.community.exception.authentication.AlreadyLoginException;
 import com.khureturn.community.exception.authentication.InvalidAccessTokenException;
-import com.khureturn.community.service.Oauth2LoginService;
+import com.khureturn.community.service.AccountService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ import java.util.Map;
 @RestController
 public class Oauth2LoginController {
 
-    private final Oauth2LoginService oauth2LoginService;
+    private final AccountService accountService;
 
 
     @PostMapping("/google")
@@ -39,8 +39,8 @@ public class Oauth2LoginController {
         if (principal != null) throw new AlreadyLoginException();
         String token = accessToken.get("accessToken");
         String idToken = accessToken.get("idToken");
-        ResponseEntity<String> GoogleUserinfo = oauth2LoginService.googleUserInfo(token, idToken);
-        return oauth2LoginService.googleLogin(GoogleUserinfo, httpServletRequest, httpServletResponse);
+        ResponseEntity<String> GoogleUserinfo = accountService.googleUserInfo(token, idToken);
+        return accountService.googleLogin(GoogleUserinfo, httpServletRequest, httpServletResponse);
     }
 }
 

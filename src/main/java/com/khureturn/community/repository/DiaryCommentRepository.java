@@ -11,5 +11,5 @@ public interface DiaryCommentRepository extends JpaRepository<DiaryComment, Long
 
     List<DiaryComment> findByDiary(Diary diary);
 
-    DiaryComment findByMemberAndDiary(Member member, Diary diary);
+    DiaryComment findDiaryCommentByDiaryAndDiaryComment(Long diaryId, Long diaryCommentId);
 }

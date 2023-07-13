@@ -3,6 +3,7 @@ package com.khureturn.community.controller;
 
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.security.UserDetails.PrincipalDetails;
+import com.khureturn.community.security.UserDetails.PrincipalService;
 import com.khureturn.community.service.DiaryLikeService;
 import com.khureturn.community.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,11 @@ public class DiaryLikeController {
         return ResponseEntity.ok().build();
     }
 
-//    @DeleteMapping("/{postId}/like")
-//    public ResponseEntity<Void> deleteLike(@PathVariable(name = "postId")Long postId){
-//        Member memberId =
-//        diaryLikeService.diaryUnlike(postId, memberId);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{postId}/like")
+    public ResponseEntity<Void> deleteLike(@PathVariable(name = "postId")Long postId, @AuthenticationPrincipal Member member){
+        Member member1 = member;
+        diaryLikeService.diaryUnlike(postId, member1);
+        return ResponseEntity.ok().build();
+    }
 
 }
