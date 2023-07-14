@@ -31,6 +31,7 @@ public class DiaryLikeService {
                 .build();
 
         diaryLikeRepository.save(diaryLike);
+        diary.increaseLike();
 
     }
 
@@ -41,6 +42,13 @@ public class DiaryLikeService {
                 .orElseThrow(() -> new NotFoundException("좋아요를 찾을 수 없습니다"));
 
         diaryLikeRepository.delete(diaryLike);
+        diary.decreaseLike();
 
     }
+
+    public Boolean findDiaryLikeByMemberAndDiary(Long memberId, Long diaryId){
+        Boolean isLiked = diaryLikeRepository.existsDiaryLikeByMemberAndDiary(memberId, diaryId);
+        return isLiked;
+    }
+
 }

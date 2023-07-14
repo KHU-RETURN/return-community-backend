@@ -160,4 +160,8 @@ public class MemberService {
             throw new InvalidMemberInfoException(FailedMemberInfo.EMAIL.getDuplicated_errorCode());
         }
     }
+
+    public Member findByName(String name){
+        return memberRepository.findByName(name);
+    }
 }

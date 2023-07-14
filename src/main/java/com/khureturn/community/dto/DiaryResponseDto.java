@@ -24,13 +24,13 @@ public class DiaryResponseDto {
 
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
-        private Long viewCount;
-        private Long bookmarkedCount;
+        private int viewCount;
+        private int bookmarkedCount;
         private Boolean isAnonymous;
 
         private Boolean isMyPost;
-        private Long likeCount;
-        private Long commentCount;
+        private int likeCount;
+        private int commentCount;
     }
 
     @Builder
@@ -39,7 +39,6 @@ public class DiaryResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DiaryListDto {
         private List<DiaryDto> diaryDtoList;
-        private Integer size;
     }
 
     @Builder
@@ -57,6 +56,7 @@ public class DiaryResponseDto {
     public static class UpdateDiaryDto {
         private Long postId;
     }
+
 
 
 

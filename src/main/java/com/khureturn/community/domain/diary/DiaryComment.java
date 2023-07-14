@@ -5,6 +5,8 @@ import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,6 +20,8 @@ public class DiaryComment extends BaseEntity {
     private Long id;
     private String diaryCommentContent;
 
+    private String diaryHashtag;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
     private Diary diary;
@@ -27,6 +31,7 @@ public class DiaryComment extends BaseEntity {
     private Member member;
 
     public void update(String diaryCommentContent){
+
         this.diaryCommentContent = diaryCommentContent;
     }
 }

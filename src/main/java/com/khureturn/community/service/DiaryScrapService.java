@@ -3,11 +3,9 @@ package com.khureturn.community.service;
 
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
-import com.khureturn.community.domain.diary.DiaryLike;
 import com.khureturn.community.domain.diary.DiaryScrap;
 import com.khureturn.community.exception.DuplicateInsertionException;
 import com.khureturn.community.exception.NotFoundException;
-import com.khureturn.community.repository.DiaryLikeRepository;
 import com.khureturn.community.repository.DiaryRepository;
 import com.khureturn.community.repository.DiaryScrapRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +31,7 @@ public class DiaryScrapService {
                 .build();
 
         diaryScrapRepository.save(diaryScrap);
+        diary.increaseScrap();
 
     }
 
@@ -43,6 +42,12 @@ public class DiaryScrapService {
                 .orElseThrow(() -> new NotFoundException("스크랩을 찾을 수 없습니다"));
 
         diaryScrapRepository.delete(diaryScrap);
+        diary.decreaseScrap();
 
+    }
+
+    public Boolean findDiaryScrapByMemberAndDiary(Long memberId, Long diaryId){
+        Boolean isBookmarked = diaryScrapRepository.existsDiaryScrapByMemberAndDiary(memberId, diaryId);
+        return isBookmarked;
     }
 }

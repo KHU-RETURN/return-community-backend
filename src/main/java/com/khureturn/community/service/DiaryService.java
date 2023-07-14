@@ -5,6 +5,7 @@ import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryFile;
 import com.khureturn.community.dto.DiaryConverter;
 import com.khureturn.community.dto.DiaryRequestDto;
+import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.DiaryFileRepository;
 import com.khureturn.community.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +46,13 @@ public class DiaryService{
     }
 
     public Diary findById(Long diaryId){
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));;
+        diary = Diary.builder().diaryViewCount(diary.getDiaryViewCount()+1).build();
+        diaryRepository.save(diary);
+        diary.increaseHit();
         return diaryRepository.findById(diaryId).get();
     }
-
 
 
     public List<Diary> findAllByMember(Member member){
@@ -59,4 +64,11 @@ public class DiaryService{
     public List<Diary> findAll(){
         return diaryRepository.findAll();
     }
+
+    public boolean findByMember(Long memberId){
+        return diaryRepository.existsByMember(memberId);
+    }
+
+
+
 }

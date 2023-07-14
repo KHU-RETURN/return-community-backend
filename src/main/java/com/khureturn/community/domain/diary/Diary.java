@@ -4,6 +4,8 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +29,15 @@ public class Diary extends BaseEntity {
     private int thumbnailIndex;
 
     @Column(columnDefinition = "INT DEFAULT 0")
-    private Long diaryLikeCount;
+    private int diaryLikeCount;
 
     @Column(columnDefinition = "INT DEFAULT 0")
-    private Long diaryScrapCount;
+    private int diaryScrapCount;
 
     @Column(columnDefinition = "INT DEFAULT 0")
-    private Long diaryViewCount;
-    private Long diaryCommentCount;
+    private int diaryViewCount;
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private int diaryCommentCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -56,5 +59,13 @@ public class Diary extends BaseEntity {
         this.diaryContent=diaryContent;
         this.isAnonymous=isAnonymous;
     }
+
+    public void increaseHit(){this.diaryViewCount++;}
+    public void increaseLike(){ this.diaryLikeCount++;}
+    public void increaseScrap(){this.diaryScrapCount++;}
+    public void decreaseLike(){ this.diaryLikeCount--;}
+    public void decreaseScrap(){this.diaryScrapCount--;}
+
+
 
 }
