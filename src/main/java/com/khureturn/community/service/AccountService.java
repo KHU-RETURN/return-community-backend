@@ -15,8 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -28,6 +31,19 @@ import java.util.regex.Pattern;
 @Service
 public class AccountService {
 
+    @Value("${google.client-id}")
+    private String CLIENT_ID;
+
+    @Value("${google.client-secret}")
+    private String CLIENT_SECRET;
+
+
+    @Value("${google.grant-type}")
+    private String GRANT_TYPE;
+
+    @Value("${google.redirect-uri}")
+    private String REDIRECT_URI;
+
     private final MemberRepository userRepository;
 
     private final JwtProvider jwtTokenProvider;
@@ -38,6 +54,7 @@ public class AccountService {
 
     private final String EMAIL_PATTERN = "^[A-Za-z0-9._%+-]+@khu\\.ac\\.kr$";
 
+
     public boolean isValidEmail(String email) {
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
@@ -45,9 +62,35 @@ public class AccountService {
     }
 
 
-    public ResponseEntity<String> googleUserInfo(String accessToken, String idToken) {
-        HttpHeaders headers = new HttpHeaders();
+    public ResponseEntity<String> googleUserInfo(String code) throws ParseException {
         RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders accessTokenHeaders = new HttpHeaders();
+        accessTokenHeaders.add("Content-type", "application/x-www-form-urlencoded");
+
+        MultiValueMap<String, String> accessTokenParams = new LinkedMultiValueMap<>();
+        accessTokenParams.add("client_id", CLIENT_ID);
+        accessTokenParams.add("client_secret", CLIENT_SECRET);
+        accessTokenParams.add("code", code);
+        accessTokenParams.add("grant_type", GRANT_TYPE);
+        accessTokenParams.add("redirect_uri", REDIRECT_URI);
+
+        HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(accessTokenParams, accessTokenHeaders);
+
+        ResponseEntity<String> accessTokenResponse = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v4/token",
+                HttpMethod.POST,
+                accessTokenRequest,
+                String.class
+        );
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(accessTokenResponse.getBody());
+        log.info(jsonObject.toJSONString());
+        String accessToken = (String) jsonObject.get("access_token");
+        String idToken = (String) jsonObject.get("id_token");
+
+
+        HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         ResponseEntity<String> GoogleUserinfo;
         try {
@@ -125,6 +168,7 @@ public class AccountService {
             return new ResponseEntity<MemberResponseDto.GoogleAccountInfoDto>(googleAccountInfoDto, httpHeaders, HttpStatus.OK);
         }
     }
+
 
 
     public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {

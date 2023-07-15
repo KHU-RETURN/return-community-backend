@@ -21,7 +21,8 @@ spring:
         format_sql: true
 
   profiles:
-    include: jwt
+    include:
+      - jwt
 
   h2:
     console:
@@ -38,4 +39,10 @@ server:
     enabled: true
     mime-types: text/html,text/plain,text/css,application/javascript,application/json, application/zip, application/octet-stream
 
+
+google:
+  client-id: ""
+  client-secret: ""
+  grant-type: ""
+  redirect-uri: ""
 

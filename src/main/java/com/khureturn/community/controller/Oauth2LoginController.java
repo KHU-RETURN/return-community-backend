@@ -10,14 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
+
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Map;
 
 
 @Slf4j
@@ -28,18 +26,15 @@ public class Oauth2LoginController {
 
     private final AccountService accountService;
 
-
     @PostMapping("/google")
     public ResponseEntity<?> googleOauthLogin(
             Principal principal,
-            @RequestBody Map<String, String> accessToken,
+            @RequestParam String code,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
     ) throws InvalidAccessTokenException, ParseException, ServletException, IOException {
         if (principal != null) throw new AlreadyLoginException();
-        String token = accessToken.get("accessToken");
-        String idToken = accessToken.get("idToken");
-        ResponseEntity<String> GoogleUserinfo = accountService.googleUserInfo(token, idToken);
+        ResponseEntity<String> GoogleUserinfo = accountService.googleUserInfo(code);
         return accountService.googleLogin(GoogleUserinfo, httpServletRequest, httpServletResponse);
     }
 }
