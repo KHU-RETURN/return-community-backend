@@ -15,10 +15,8 @@ public class DiaryFile extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "diary_file_id")
     private Long id;
-    private String diaryFileName;
     private String diaryOriginalUrl;
     private Integer diaryThumb;
-    private String diaryFileSize;
     @Enumerated(EnumType.STRING)
     private MediaType mediaType;
 

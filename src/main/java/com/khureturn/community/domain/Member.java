@@ -17,7 +17,6 @@ import com.khureturn.community.dto.MemberRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class Member extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String studentId;
-
 
     @Column(unique = true, nullable = false)
     private String googleSub;
@@ -56,7 +54,6 @@ public class Member extends BaseEntity {
     private RoleStatus roleStatus;
 
     private boolean isPaid;
-
 
 
     public void transferSignUpDtoToMember(MemberRequestDto.SignUpRequestDto signUpRequestDto, String profileImg){
@@ -101,8 +98,6 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy ="member")
     private List<NoticeScrap> noticeScraps = new ArrayList<>();
-
-
 
 
 }

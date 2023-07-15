@@ -7,6 +7,7 @@ import java.util.List;
 
 public class DiaryResponseDto {
 
+
     @Builder
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,13 +24,13 @@ public class DiaryResponseDto {
 
         private LocalDateTime createdDate;
         private LocalDateTime modifiedDate;
-        private Long viewCount;
-        private Long bookmarkedCount;
+        private int viewCount;
+        private int bookmarkedCount;
         private Boolean isAnonymous;
 
         private Boolean isMyPost;
-        private Long likeCount;
-        private Long commentCount;
+        private int likeCount;
+        private int commentCount;
     }
 
     @Builder
@@ -38,7 +39,6 @@ public class DiaryResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DiaryListDto {
         private List<DiaryDto> diaryDtoList;
-        private Integer size;
     }
 
     @Builder
@@ -46,7 +46,7 @@ public class DiaryResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateDiaryDto {
-        private Long DiaryId;
+        private Long postId;
     }
 
     @Builder
@@ -54,8 +54,9 @@ public class DiaryResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UpdateDiaryDto {
-        private Long DiaryId;
+        private Long postId;
     }
+
 
 
 

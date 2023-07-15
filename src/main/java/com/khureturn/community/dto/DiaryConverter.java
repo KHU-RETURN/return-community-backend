@@ -2,52 +2,94 @@ package com.khureturn.community.dto;
 
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
+import com.khureturn.community.domain.diary.DiaryComment;
 import com.khureturn.community.domain.diary.DiaryFile;
+import com.khureturn.community.repository.MemberRepository;
+import com.khureturn.community.service.DiaryCommentService;
+import com.khureturn.community.service.DiaryLikeService;
+import com.khureturn.community.service.DiaryScrapService;
+import com.khureturn.community.service.DiaryService;
+import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class DiaryConverter {
 
-    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request, Member member){
+    private static MemberRepository memberRepository;
+    private static DiaryLikeService diaryLikeService;
+    private static DiaryScrapService diaryScrapService;
+
+    private static DiaryCommentService diaryCommentService;
+    private static DiaryService diaryService;
+
+    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request){
         return Diary.builder()
                 .diaryTitle(request.getTitle())
                 .diaryContent(request.getContent())
                 .isAnonymous(request.getIsAnonymous())
-                .member(member)
+                .thumbnailIndex(request.getThumbnailIndex())
                 .build();
     }
-    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, Diary diary){
+    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, String media){
         return DiaryFile.builder()
                 .diaryThumb(request.getThumbnailIndex())
-                .diaryOriginalUrl(request.getMedia())
-                .diary(diary)
+                .diaryOriginalUrl(media)
                 .build();
     }
 
-    public static DiaryResponseDto.DiaryDto toDiaryDto(Diary diary){
+    public static DiaryResponseDto.DiaryDto toDiaryDto(Diary diary, DiaryFile diaryFile, Member member){
+        Boolean isLiked = diaryLikeService.findDiaryLikeByMemberAndDiary(member.getMemberId(), diary.getId());
+        Boolean isBookmarked = diaryScrapService.findDiaryScrapByMemberAndDiary(member.getMemberId(), diary.getId());
+        Boolean isMyPost = diaryService.findByMember(member.getMemberId());
+        String url = diaryFile.getDiaryOriginalUrl();
+        List<String> list = Arrays.asList(url.split(","));
         return DiaryResponseDto.DiaryDto.builder()
-                .diaryId(diary.getId())
+                .isLiked(isLiked)
+                .isBookmarked(isBookmarked)
+                .member(Member.builder().memberId(member.getMemberId()).profileImg(member.getProfileImg()).name(member.getName()).phoneNumber(member.getPhoneNumber()).build())
                 .title(diary.getDiaryTitle())
                 .content(diary.getDiaryContent())
-                .isAnonymous(diary.getIsAnonymous())
-                .bookmarkedCount(diary.getDiaryScrapCount())
-                .commentCount(diary.getDiaryCommentCount())
+                .mediaList(list)
                 .createdDate(diary.getCreatedAt())
+                .modifiedDate(diary.getUpdateAt())
+                .viewCount(diary.getDiaryViewCount())
+                .bookmarkedCount(diary.getDiaryScrapCount())
+                .isAnonymous(diary.getIsAnonymous())
+                .isMyPost(isMyPost)
+                .likeCount(diary.getDiaryLikeCount())
+                .commentCount(diary.getDiaryCommentCount())
                 .build();
     }
 
-    public static List<DiaryResponseDto.DiaryDto> toDiaryDtoList(List<Diary> diaries){
-        return diaries.stream()
-                .map(diary -> toDiaryDto(diary))
+
+    public static DiaryCommentResponseDto.CommentDto toCommentDto(DiaryComment diaryComment){
+
+        Member member = memberRepository.findByDiaryComments(diaryComment.getId());
+
+        return DiaryCommentResponseDto.CommentDto.builder()
+                .commentId(diaryComment.getId())
+                .content(diaryComment.getDiaryCommentContent())
+                .member(Member.builder().memberId(member.getMemberId()).profileImg(member.getProfileImg()).name(member.getName()).build())
+                .createdDate(diaryComment.getCreatedAt())
+                .build();
+    }
+
+    public static List<DiaryCommentResponseDto.CommentDto> toCommentDtoList(List<DiaryComment> commentList){
+        return commentList.stream()
+                .map(diaryComment -> toCommentDto(diaryComment))
                 .collect(Collectors.toList());
     }
 
-    public static DiaryResponseDto.DiaryListDto toDiaryListDto(List<Diary> diaries){
-        return DiaryResponseDto.DiaryListDto.builder()
-                .diaryDtoList(toDiaryDtoList(diaries))
-                .size(diaries.size())
+    public static DiaryCommentResponseDto.CommentListDto toCommentListDto(List<DiaryComment> commentList){
+        return DiaryCommentResponseDto.CommentListDto.builder()
+                .CommentDtoList(toCommentDtoList(commentList))
                 .build();
     }
+
+
+
 
 
 }

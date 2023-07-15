@@ -2,6 +2,7 @@ package com.khureturn.community.domain.base;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,4 +18,9 @@ public class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime updateAt;
+
+    @PrePersist
+    public void createdAt(){
+        this.createdAt = LocalDateTime.now();
+    }
 }
