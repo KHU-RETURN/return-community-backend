@@ -1,2 +1,2 @@
 jwt:
-  secret : ""
+  secret : "return"
