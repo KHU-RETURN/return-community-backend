@@ -1,4 +1,7 @@
 package com.khureturn.community.dto;
+import com.khureturn.community.domain.common.ManagerStatus;
+import com.khureturn.community.domain.common.RoleStatus;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 public class MemberResponseDto {
@@ -24,5 +27,29 @@ public class MemberResponseDto {
         private String name;
         private String profileImgURL;
 
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FullUserInformationResponse{
+
+
+        String name;
+
+        String phoneNumber;
+
+        String email;
+
+        String studentId;
+
+        RoleStatus role;
+
+        ManagerStatus managerType;
+
+        Boolean isPaid;
+
+        String profileImgURL;
     }
 }
