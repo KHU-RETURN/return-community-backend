@@ -1,5 +1,6 @@
 package com.khureturn.community.controller;
 
+import com.khureturn.community.dto.MemberResponseDto;
 import com.khureturn.community.exception.authentication.AlreadyLoginException;
 import com.khureturn.community.service.AccountService;
 import com.khureturn.community.service.MemberService;
@@ -27,6 +28,15 @@ public class MemberController {
     private final MemberService memberService;
 
     private final AccountService accountService;
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/profile/detail")
+    public ResponseEntity<MemberResponseDto.FullUserInformationResponse> fullUserInformation(Principal principal) {
+        log.info(principal.getName());
+        return ResponseEntity.ok().body(memberService.getFullUserInformation(principal.getName()));
+    }
+
 
 
 
