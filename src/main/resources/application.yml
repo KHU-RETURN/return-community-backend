@@ -1,17 +1,17 @@
-#spring:
-#  datasource:
-#    url: ${LOCAL_DB_URL}
-#    username: ${LOCAL_DB_USERNAME}
-#    password: ${LOCAL_DB_PASSWORD}
-#    driver-class-name: org.h2.Driver
-
-
 spring:
   datasource:
-    driver-class-name: org.h2.Driver  # Database를 H2로 사용하겠다.
-    url: jdbc:h2:~/test  # H2 접속 정보
-    username: sa  # H2 접속 시 입력할 username 정보 (원하는 것으로 입력)
-    password:  # H2 접속 시 입력할 password 정보 (원하는 것으로 입력)
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+    driver-class-name: org.h2.Driver
+
+
+#spring:
+#  datasource:
+#    driver-class-name: org.h2.Driver  # Database를 H2로 사용하겠다.
+#    url: jdbc:h2:~/test  # H2 접속 정보
+#    username: sa  # H2 접속 시 입력할 username 정보 (원하는 것으로 입력)
+#    password:  # H2 접속 시 입력할 password 정보 (원하는 것으로 입력)
 
   data:
     redis:
@@ -46,10 +46,8 @@ server:
     enabled: true
     mime-types: text/html,text/plain,text/css,application/javascript,application/json, application/zip, application/octet-stream
 
-
 google:
-  client-id: ""
-  client-secret: ""
-  grant-type: ""
-  redirect-uri: ""
-
+  client-id: "68725075427-bnc849gn7fsfpliptlula9pc73nu50mm.apps.googleusercontent.com"
+  client-secret: "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"
+  grant-type: "authorization_code"
+  redirect-uri: "http://localhost:8080/code"
