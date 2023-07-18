@@ -47,7 +47,7 @@ server:
     mime-types: text/html,text/plain,text/css,application/javascript,application/json, application/zip, application/octet-stream
 
 google:
-  client-id: "68725075427-bnc849gn7fsfpliptlula9pc73nu50mm.apps.googleusercontent.com"
-  client-secret: "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"
-  grant-type: "authorization_code"
-  redirect-uri: "http://localhost:8080/code"
+  client-id:
+  client-secret:
+  grant-type:
+  redirect-uri:
