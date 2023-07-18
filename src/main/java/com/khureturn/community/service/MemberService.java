@@ -45,8 +45,6 @@ public class MemberService {
     private final MediaService mediaService;
 
 
-
-
     public ResponseEntity<?> signUp(String signUpRequest, MultipartFile profileImg, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
 
@@ -79,7 +77,6 @@ public class MemberService {
 
         return new ResponseEntity<MemberResponseDto.MemberBriefInfoDto>(memberBriefInfoDto, httpHeaders, HttpStatus.CREATED);
     }
-
 
 
     public MemberResponseDto.MemberBriefInfoDto responseBriefInformation(Member member) {
@@ -122,7 +119,6 @@ public class MemberService {
     }
 
 
-
     public void validatePhoneNumber(String phoneNumber, String googleSub) {
 
         if (googleSub != null) {
@@ -161,7 +157,21 @@ public class MemberService {
         }
     }
 
-    public Member findByName(String name){
+    public Member findByName(String name) {
         return memberRepository.findByName(name);
+    }
+
+    public MemberResponseDto.FullUserInformationResponse getFullUserInformation(String username) {
+        Member member = memberRepository.findByGoogleSub(username).orElseThrow(InvalidAccessTokenException::new);
+        return MemberResponseDto.FullUserInformationResponse.builder()
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .email(member.getEmail())
+                .studentId(member.getStudentId())
+                .role(member.getRoleStatus())
+                .profileImgURL(member.getProfileImg())
+                .managerType(member.getManagerStatus())
+                .isPaid(member.isPaid())
+                .build();
     }
 }

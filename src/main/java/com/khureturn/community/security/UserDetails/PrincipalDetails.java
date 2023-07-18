@@ -36,7 +36,7 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getName();
+        return member.getGoogleSub();
     }
 
     @Override
