@@ -41,29 +41,29 @@ jobs:
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         with:
           arguments: build
-
-      - name: Upload artifact
+        #jar 실행파일생성
+      - name: Build the *.jar executable as Gradle
         uses: actions/upload-artifact@v2
         with:
           name: jarfile
           path: build/libs/community-0.0.1-SNAPSHOT.jar
-
+        #파일 여부확인
       - name: checkout file list
         run: ls
-
-      - name: AWS 인증하기
+        #AWS에 접속한다.
+      - name: Access AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # AWS 인증이 완료되었는지 테스트합니다.
-      - name: AWS Lightsail에 연결되었는지 확인
+      #AWS 인증으 우선 실시항 접소 가능ㅎ 사용자인지 확인
+      - name: Check the connection status of AWS Lightsail
         run: aws configure list
 
       # 배포 자동화를 시작합니다.
-      - name: 배포 자동화
+      - name: Move executable files from GitHub's virtual environment
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
@@ -73,7 +73,7 @@ jobs:
           strip_components: 1
           target: '/home/ubuntu'
 
-      - name: stop_*jar
+      - name: Stop the running server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
@@ -81,7 +81,7 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: ./stop.sh
 
-      - name: start_*jar
+      - name: Deploy a new version
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
