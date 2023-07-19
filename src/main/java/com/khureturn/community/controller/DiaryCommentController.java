@@ -34,9 +34,9 @@ public class DiaryCommentController {
 
     // 댓글 조회
     @GetMapping("/diary/{postId}/comment")
-    public ResponseEntity<DiaryCommentResponseDto.CommentListDto> getComment(@PathVariable(name = "postId")Long postId){
+    public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getComment(@PathVariable(name = "postId")Long postId){
         List<DiaryComment> commentList = diaryCommentService.findAllByDiary(postId);
-        return ResponseEntity.ok((DiaryCommentResponseDto.CommentListDto) DiaryConverter.toCommentListDto(commentList));
+        return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
     }
 
     @DeleteMapping("/diary/{postId}/comment/{commentId}")
