@@ -8,10 +8,10 @@
 name: Java CI with Gradle
 
 on: #이벤트 감지
-  push:
-    branches: [ "develop" ] # 해당 브렌치에 PUSH
   pull_request:
-    branches: [ "develop" ] # 해당 브렌치에 PR
+    types: [closed]
+  workflow_dispatch: 
+
 env:
   LIGHTSAIL_SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
   LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
