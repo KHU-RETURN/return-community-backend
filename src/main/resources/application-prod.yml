@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.h2.Driver
+
+
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /console
+
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+
+server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/plain,text/css,application/javascript,application/json, application/zip, application/octet-stream
+
+
+google:
+  client-id: ${GOOGLE_CLIENT_SECRET}
+  client-secret: ${GOOGLE_CLIENT_SECRET}
+  grant-type: ${GOOGLE_GRANT_TYPE}
+  redirect-uri: ${GOOGLE_REDIRECT_URI}
+
+
+jwt:
+  secret : ${JWT_SECRET}
+
+
