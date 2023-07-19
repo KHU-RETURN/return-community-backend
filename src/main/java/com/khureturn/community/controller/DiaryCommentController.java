@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -20,8 +21,8 @@ public class DiaryCommentController {
     private final DiaryCommentService diaryCommentService;
 
     @PostMapping("/diary/{postId}/comment")
-    public ResponseEntity<DiaryCommentResponseDto.CreateDiaryCommentDto> createComment(@PathVariable(name = "postId")Long postId, @RequestBody DiaryCommentRequestDto.CreateCommentDto request){
-        DiaryComment diaryComment = diaryCommentService.create(postId, request);
+    public ResponseEntity<DiaryCommentResponseDto.CreateDiaryCommentDto> createComment(Principal principal, @PathVariable(name = "postId")Long postId, @RequestBody DiaryCommentRequestDto.CreateCommentDto request){
+        DiaryComment diaryComment = diaryCommentService.create(postId, request, principal);
         return ResponseEntity.ok(DiaryCommentResponseDto.CreateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
 
@@ -35,7 +36,7 @@ public class DiaryCommentController {
     @GetMapping("/diary/{postId}/comment")
     public ResponseEntity<DiaryCommentResponseDto.CommentListDto> getComment(@PathVariable(name = "postId")Long postId){
         List<DiaryComment> commentList = diaryCommentService.findAllByDiary(postId);
-        return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
+        return ResponseEntity.ok((DiaryCommentResponseDto.CommentListDto) DiaryConverter.toCommentListDto(commentList));
     }
 
     @DeleteMapping("/diary/{postId}/comment/{commentId}")

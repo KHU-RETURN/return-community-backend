@@ -102,32 +102,20 @@ public class DiaryConverter {
     }
 
 
-    public static DiaryCommentResponseDto.CommentDto toCommentDto(DiaryComment diaryComment){
-
-        Member member = memberRepository.findByDiaryComments(diaryComment.getId());
-
-        return DiaryCommentResponseDto.CommentDto.builder()
-                .commentId(diaryComment.getId())
-                .content(diaryComment.getDiaryCommentContent())
-                .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
-                .createdDate(diaryComment.getCreatedAt())
-                .build();
+    public static List<DiaryCommentResponseDto.CommentDto> toCommentListDto(List<DiaryComment> diaryCommentList){
+        List<DiaryCommentResponseDto.CommentDto> list = new ArrayList<>();
+        for(DiaryComment c: diaryCommentList){
+            Member member = c.getMember();
+            DiaryCommentResponseDto.CommentDto comment = DiaryCommentResponseDto.CommentDto.builder()
+                    .commentId(c.getId())
+                    .content(c.getDiaryCommentContent())
+                    .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
+                    .createdDate(c.getCreatedAt())
+                    .build();
+            list.add(comment);
+        }
+        return list;
     }
-
-    public static List<DiaryCommentResponseDto.CommentDto> toCommentDtoList(List<DiaryComment> commentList){
-        return commentList.stream()
-                .map(diaryComment -> toCommentDto(diaryComment))
-                .collect(Collectors.toList());
-    }
-
-    public static DiaryCommentResponseDto.CommentListDto toCommentListDto(List<DiaryComment> commentList){
-        return DiaryCommentResponseDto.CommentListDto.builder()
-                .CommentDtoList(toCommentDtoList(commentList))
-                .build();
-    }
-
-
-
 
 
 }
