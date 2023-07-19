@@ -16,7 +16,7 @@ public class DiaryCommentResponseDto {
         private Long commentId;
         private String content;
         //private Long recommentCount;
-        private Member member;
+        private MemberResponseDto.MemberDto user;
         private LocalDateTime createdDate;
 
 

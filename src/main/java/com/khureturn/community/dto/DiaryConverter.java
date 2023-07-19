@@ -4,12 +4,15 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryComment;
 import com.khureturn.community.domain.diary.DiaryFile;
+import com.khureturn.community.repository.DiaryFileRepository;
 import com.khureturn.community.repository.MemberRepository;
 import com.khureturn.community.service.DiaryCommentService;
 import com.khureturn.community.service.DiaryLikeService;
 import com.khureturn.community.service.DiaryScrapService;
 import com.khureturn.community.service.DiaryService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +23,7 @@ public class DiaryConverter {
     private static MemberRepository memberRepository;
     private static DiaryLikeService diaryLikeService;
     private static DiaryScrapService diaryScrapService;
+    private static DiaryFileRepository diaryFileRepository;
 
     private static DiaryCommentService diaryCommentService;
     private static DiaryService diaryService;
@@ -48,7 +52,7 @@ public class DiaryConverter {
         return DiaryResponseDto.DiaryDto.builder()
                 .isLiked(isLiked)
                 .isBookmarked(isBookmarked)
-                .member(Member.builder().memberId(member.getMemberId()).profileImg(member.getProfileImg()).name(member.getName()).phoneNumber(member.getPhoneNumber()).build())
+                .member(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).phoneNumber(member.getPhoneNumber()).build())
                 .title(diary.getDiaryTitle())
                 .content(diary.getDiaryContent())
                 .mediaList(list)
@@ -63,6 +67,37 @@ public class DiaryConverter {
                 .build();
     }
 
+    public static List<DiaryResponseDto.DiarySortDto> toDiarySortDto(List<Diary> diaryList, Member member){
+
+        List<DiaryResponseDto.DiarySortDto> sortList = new ArrayList<>();
+        for(Diary d: diaryList){
+            DiaryFile diaryFile = diaryFileRepository.findByDiary(d.getId());
+            String url = diaryFile.getDiaryOriginalUrl();
+            List<String> list = Arrays.asList(url.split(","));
+            Boolean isLiked = diaryLikeService.findDiaryLikeByMemberAndDiary(member.getMemberId(), d.getId());
+            Boolean isBookmarked = diaryScrapService.findDiaryScrapByMemberAndDiary(member.getMemberId(), d.getId());
+            Boolean isMyPost = diaryService.findByMember(member.getMemberId());
+            DiaryResponseDto.DiarySortDto result =DiaryResponseDto.DiarySortDto.builder()
+                    .diaryId(d.getId())
+                    .title(d.getDiaryTitle())
+                    .thumbnailImgURL(list.get(d.getThumbnailIndex()))
+                    .likeCount(d.getDiaryLikeCount())
+                    .commentCount(d.getDiaryCommentCount())
+                    .viewCount(d.getDiaryViewCount())
+                    .member(MemberResponseDto.MemberSortDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
+                    .createdDate(d.getCreatedAt())
+                    .isAnonymous(d.getIsAnonymous())
+                    .isMyPost(isMyPost)
+                    .isLiked(isLiked)
+                    .isBookmarked(isBookmarked)
+                    .build();
+            sortList.add(result);
+
+        }
+        return sortList;
+
+    }
+
 
     public static DiaryCommentResponseDto.CommentDto toCommentDto(DiaryComment diaryComment){
 
@@ -71,7 +106,7 @@ public class DiaryConverter {
         return DiaryCommentResponseDto.CommentDto.builder()
                 .commentId(diaryComment.getId())
                 .content(diaryComment.getDiaryCommentContent())
-                .member(Member.builder().memberId(member.getMemberId()).profileImg(member.getProfileImg()).name(member.getName()).build())
+                .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
                 .createdDate(diaryComment.getCreatedAt())
                 .build();
     }

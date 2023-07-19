@@ -52,4 +52,27 @@ public class MemberResponseDto {
 
         String profileImgURL;
     }
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberDto{
+        private Long memberId;
+        private String profileImgURL;
+        private String name;
+        private String phoneNumber;
+
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberSortDto{
+        private Long memberId;
+        private String profileImgURL;
+        private String name;
+
+    }
+
 }

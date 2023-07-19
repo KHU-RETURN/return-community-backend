@@ -12,6 +12,7 @@ import com.khureturn.community.service.DiaryService;
 import com.khureturn.community.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.ModCheck;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +55,15 @@ public class DiaryController {
         String name = principal.getName();
         Member member = memberService.findByName(name);
         return ResponseEntity.ok(DiaryConverter.toDiaryDto(diary, diaryFile, member));
+    }
+
+    // 일기장 메인화면 (기본 최신순)
+    @GetMapping("")
+    public ResponseEntity<DiaryResponseDto.DiarySortDto> getDiaryList(Principal principal, @RequestParam(name = "cursor")int cursor, @RequestParam(name = "size")int size){
+        List<Diary> diaryList = diaryService.getPage((long) cursor,size);
+        String name = principal.getName();
+        Member member = memberService.findByName(name);
+        return ResponseEntity.ok((DiaryResponseDto.DiarySortDto) DiaryConverter.toDiarySortDto(diaryList, member));
     }
 
     @DeleteMapping("/{postId}")

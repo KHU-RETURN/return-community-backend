@@ -36,7 +36,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	testImplementation 'org.springframework.security:spring-security-test'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'commons-fileupload:commons-fileupload:1.5'
 	implementation 'commons-io:commons-io:2.11.0'
 	implementation 'net.coobird:thumbnailator:0.4.19'

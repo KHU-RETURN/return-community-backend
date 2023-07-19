@@ -16,7 +16,7 @@ public class DiaryResponseDto {
         private Long diaryId;
         private Boolean isLiked;
         private Boolean isBookmarked;
-        private Member member;
+        private MemberResponseDto.MemberDto member;
         private String title;
         private String content;
 
@@ -32,6 +32,7 @@ public class DiaryResponseDto {
         private int likeCount;
         private int commentCount;
     }
+
 
     @Builder
     @Getter
@@ -56,6 +57,27 @@ public class DiaryResponseDto {
     public static class UpdateDiaryDto {
         private Long postId;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class DiarySortDto{
+        private Long diaryId;
+        private String title;
+        private String thumbnailImgURL;
+        private int likeCount;
+        private int commentCount;
+        private int viewCount;
+        private MemberResponseDto.MemberSortDto member;
+        private LocalDateTime createdDate;
+        private Boolean isAnonymous;
+        private Boolean isMyPost;
+
+        private Boolean isLiked;
+        private Boolean isBookmarked;
+    }
+
 
 
 
