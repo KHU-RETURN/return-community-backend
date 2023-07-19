@@ -17,14 +17,7 @@ env:
   LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
   LIGHTSAIL_USERNAME: ubuntu
   AWS_REGION: ap-northeast-2
-  JWT_SECRET: ${{ secrets.JWT_SECRET }}
-  DB_URL: ${{ secrets.DB_URL }}
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-  GOOGLE_GRANT_TYPE: ${{ secrets.GOOGLE_GRANT_TYPE }}
-  GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+
 
 jobs:
   build:
@@ -80,6 +73,25 @@ jobs:
           username: ${{env.LIGHTSAIL_USERNAME}}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: ./stop.sh
+
+      - name: write start.sh
+        uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.LIGHTSAIL_HOST }}
+            username: ${{env.LIGHTSAIL_USERNAME}}
+            key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+            script: echo -e "#!/bin/bash \n
+                              JAR=/libs/community-0.0.1-SNAPSHOT.jar\n
+                              LOG=/home/ubuntu/RETURN.log\n
+                              JWT_SECRET=${{ secrets.JWT_SECRET }}\n
+                              DB_URL=${{ secrets.DB_URL }}\n
+                              DB_USERNAME=${{ secrets.DB_USERNAME }}\n
+                              DB_PASSWORD= ${{ secrets.DB_PASSWORD }}\n
+                              GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}\n
+                              GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}\n
+                              GOOGLE_GRANT_TYPE=${{ secrets.GOOGLE_GRANT_TYPE }}\n
+                              GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }}\n
+                              nohup java -jar $JAR > $LOG 2>&1 &" >> start.sh
 
       - name: Deploy a new version
         uses: appleboy/ssh-action@master
