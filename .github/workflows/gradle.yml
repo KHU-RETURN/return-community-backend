@@ -1,0 +1,91 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on: #이벤트 감지
+  push:
+    branches: [ "develop" ] # 해당 브렌치에 PUSH
+  pull_request:
+    branches: [ "develop" ] # 해당 브렌치에 PR
+env:
+  LIGHTSAIL_SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+  LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
+  LIGHTSAIL_USERNAME: ubuntu
+  AWS_REGION: ap-northeast-2
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  GOOGLE_GRANT_TYPE: ${{ secrets.GOOGLE_GRANT_TYPE }}
+  GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: # STEP BY STEP 실행
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        with:
+          arguments: build
+        #jar 실행파일생성
+      - name: Build the *.jar executable as Gradle
+        uses: actions/upload-artifact@v2
+        with:
+          name: jarfile
+          path: build/libs/community-0.0.1-SNAPSHOT.jar
+        #파일 여부확인
+      - name: checkout file list
+        run: ls
+        #AWS에 접속한다.
+      - name: Access AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      #AWS 인증으 우선 실시항 접소 가능ㅎ 사용자인지 확인
+      - name: Check the connection status of AWS Lightsail
+        run: aws configure list
+
+      # 배포 자동화를 시작합니다.
+      - name: Move executable files from GitHub's virtual environment
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{env.LIGHTSAIL_USERNAME}}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          source: build/libs/*
+          strip_components: 1
+          target: '/home/ubuntu'
+
+      - name: Stop the running server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{env.LIGHTSAIL_USERNAME}}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: ./stop.sh
+
+      - name: Deploy a new version
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{env.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: ./start.sh
+
