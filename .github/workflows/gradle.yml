@@ -18,6 +18,7 @@ env:
   LIGHTSAIL_USERNAME: ubuntu
   AWS_REGION: ap-northeast-2
 
+permissions: write-all
 
 jobs:
   build:
@@ -30,8 +31,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
           arguments: build
         #jar 실행파일생성
