@@ -92,22 +92,6 @@ jobs:
                     export GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} &&
                     export GOOGLE_GRANT_TYPE=${{ secrets.GOOGLE_GRANT_TYPE }} &&
                     export GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }} &&
-                    export nohup java -jar /libs/community-0.0.1-SNAPSHOT.jar > /home/ubuntu/RETURN.log 2>&1 &
+                    export java -jar /libs/community-0.0.1-SNAPSHOT.jar 
 
-
-      - name: Grant execute permission for start.sh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{env.LIGHTSAIL_USERNAME }}
-          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          script: export JWT_SECRET=${{ secrets.JWT_SECRET }}
-      
-      - name: Deploy a new version
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{env.LIGHTSAIL_USERNAME }}
-          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          script: ./start.sh
 
