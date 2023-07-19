@@ -28,18 +28,20 @@ public class DiaryConverter {
     private static DiaryCommentService diaryCommentService;
     private static DiaryService diaryService;
 
-    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request){
+    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request, Member member){
         return Diary.builder()
                 .diaryTitle(request.getTitle())
                 .diaryContent(request.getContent())
                 .isAnonymous(request.getIsAnonymous())
                 .thumbnailIndex(request.getThumbnailIndex())
+                .member(member)
                 .build();
     }
-    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, String media){
+    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, String media, Diary diary){
         return DiaryFile.builder()
                 .diaryThumb(request.getThumbnailIndex())
                 .diaryOriginalUrl(media)
+                .diary(diary)
                 .build();
     }
 
@@ -67,10 +69,11 @@ public class DiaryConverter {
                 .build();
     }
 
-    public static List<DiaryResponseDto.DiarySortDto> toDiarySortDto(List<Diary> diaryList, Member member){
+    public static List<DiaryResponseDto.DiarySortDto> toDiarySortDto(List<Diary> diaryList){
 
         List<DiaryResponseDto.DiarySortDto> sortList = new ArrayList<>();
         for(Diary d: diaryList){
+            Member member = d.getMember();
             DiaryFile diaryFile = diaryFileRepository.findByDiary(d.getId());
             String url = diaryFile.getDiaryOriginalUrl();
             List<String> list = Arrays.asList(url.split(","));

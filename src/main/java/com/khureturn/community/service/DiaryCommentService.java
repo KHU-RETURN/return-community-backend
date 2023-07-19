@@ -28,6 +28,7 @@ public class DiaryCommentService {
         DiaryComment diaryComment = DiaryComment.builder()
                 .diaryCommentContent(request.getContent())
                 .diaryHashtag(diaryHashtag)
+                .diary(diary)
                 .build();
 
         return diaryCommentRepository.save(diaryComment);

@@ -18,4 +18,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     Page<Diary> findByIdLessThanOrderByCreatedAtDesc(Long cursorId, PageRequest pageRequest);
 
+    Page<Diary> findByDiaryContentContainingIgnoreCaseAndIdLessThanOrderByDiaryLikeCountDesc(String search, Long cursorId, PageRequest pageRequest);
+
+    Page<Diary> findByDiaryContentContainingIgnoreCaseAndIdLessThanOrderByDiaryViewCountDesc(String search, Long cursorId, PageRequest pageRequest);
+
 }
