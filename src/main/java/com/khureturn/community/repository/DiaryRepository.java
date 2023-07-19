@@ -1,6 +1,8 @@
 package com.khureturn.community.repository;
 
 import com.khureturn.community.domain.diary.Diary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,5 +15,11 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findAllByMember(Long memberId);
 
     boolean existsByMember(Long memberId);
+
+    Page<Diary> findByIdLessThanOrderByCreatedAtDesc(Long cursorId, PageRequest pageRequest);
+
+    Page<Diary> findByDiaryContentContainingIgnoreCaseAndIdLessThanOrderByDiaryLikeCountDesc(String search, Long cursorId, PageRequest pageRequest);
+
+    Page<Diary> findByDiaryContentContainingIgnoreCaseAndIdLessThanOrderByDiaryViewCountDesc(String search, Long cursorId, PageRequest pageRequest);
 
 }
