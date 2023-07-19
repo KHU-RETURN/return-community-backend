@@ -76,7 +76,7 @@ jobs:
 
       - name: write start.sh
         uses: appleboy/ssh-action@master
-          with:
+        with:
             host: ${{ secrets.LIGHTSAIL_HOST }}
             username: ${{env.LIGHTSAIL_USERNAME}}
             key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
