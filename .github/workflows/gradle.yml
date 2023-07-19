@@ -8,23 +8,17 @@
 name: Java CI with Gradle
 
 on: #이벤트 감지
-  push:
-    branches: [ "develop" ] # 해당 브렌치에 PUSH
   pull_request:
-    branches: [ "develop" ] # 해당 브렌치에 PR
+    types: [closed]
+  workflow_dispatch: 
+
 env:
   LIGHTSAIL_SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
   LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
   LIGHTSAIL_USERNAME: ubuntu
   AWS_REGION: ap-northeast-2
-  JWT_SECRET: ${{ secrets.JWT_SECRET }}
-  DB_URL: ${{ secrets.DB_URL }}
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-  GOOGLE_GRANT_TYPE: ${{ secrets.GOOGLE_GRANT_TYPE }}
-  GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+
+permissions: write-all
 
 jobs:
   build:
@@ -37,8 +31,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
           arguments: build
         #jar 실행파일생성
@@ -81,6 +78,32 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: ./stop.sh
 
+      - name: write start.sh
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.LIGHTSAIL_HOST }}
+            username: ${{env.LIGHTSAIL_USERNAME}}
+            key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+            script: echo -e "#!/bin/bash\n
+                            JWT_SECRET=${{ secrets.JWT_SECRET }}\n
+                            DB_URL=${{ secrets.DB_URL }}\n
+                            DB_USERNAME=${{ secrets.DB_USERNAME }}\n
+                            DB_PASSWORD=${{ secrets.DB_PASSWORD }}\n
+                            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}\n
+                            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}\n
+                            GOOGLE_GRANT_TYPE=${{ secrets.GOOGLE_GRANT_TYPE }}\n
+                            GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }}\n
+                            nohup java -jar /libs/community-0.0.1-SNAPSHOT.jar > /home/ubuntu/RETURN.log 2>&1 &" > start.sh
+
+
+      - name: Grant execute permission for start.sh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{env.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: chmod +x start.sh
+      
       - name: Deploy a new version
         uses: appleboy/ssh-action@master
         with:
