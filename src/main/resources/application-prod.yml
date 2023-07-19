@@ -38,7 +38,7 @@ server:
 
 
 google:
-  client-id: ${GOOGLE_CLIENT_SECRET}
+  client-id: ${GOOGLE_CLIENT_ID}
   client-secret: ${GOOGLE_CLIENT_SECRET}
   grant-type: ${GOOGLE_GRANT_TYPE}
   redirect-uri: ${GOOGLE_REDIRECT_URI}
