@@ -78,21 +78,37 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: ./stop.sh
 
-      - name: start webserver
+      - name: make start.sh
         uses: appleboy/ssh-action@master
         with:
             host: ${{ secrets.LIGHTSAIL_HOST }}
             username: ${{env.LIGHTSAIL_USERNAME}}
             key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-            script: export JWT_SECRET=${{ secrets.JWT_SECRET }}&&
-                    export DB_URL=${{ secrets.DB_URL }} &&
-                    export DB_USERNAME=${{ secrets.DB_USERNAME }} &&
-                    export DB_PASSWORD=${{ secrets.DB_PASSWORD }} &&
-                    export GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} &&
-                    export GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} &&
-                    export GOOGLE_GRANT_TYPE=${{ secrets.GOOGLE_GRANT_TYPE }} &&
-                    export GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }} &&
-                    nohup java -jar ./libs/community-0.0.1-SNAPSHOT.jar > /home/ubuntu/RETURN.log 2>&1 &
+            script: echo -e "#!/bin/bash\n
+                    export JWT_SECRET=${{ secrets.JWT_SECRET }}\n
+                    export DB_URL=${{ secrets.DB_URL }}\n
+                    export DB_USERNAME=${{ secrets.DB_USERNAME }}\n
+                    export DB_PASSWORD=${{ secrets.DB_PASSWORD }}\n
+                    export GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}\n
+                    export GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}\n
+                    export GOOGLE_GRANT_TYPE=${{ secrets.GOOGLE_GRANT_TYPE }}\n
+                    export GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }}\n
+                    nohup java -jar ./libs/community-0.0.1-SNAPSHOT.jar > ./home/ubuntu/RETURN.log 2>&1 &" > start.sh
+      - name: Grant execute permission for start.sh
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.LIGHTSAIL_HOST }}
+            username: ${{env.LIGHTSAIL_USERNAME}}
+            key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+            run: chmod +x start.sh
+            
+      - name: Start server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{env.LIGHTSAIL_USERNAME}}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: ./start.sh   
 
 
 
