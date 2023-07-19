@@ -100,7 +100,7 @@ jobs:
             host: ${{ secrets.LIGHTSAIL_HOST }}
             username: ${{env.LIGHTSAIL_USERNAME}}
             key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-            run: chmod +x start.sh
+            script: chmod +x start.sh
             
       - name: Start server
         uses: appleboy/ssh-action@master
