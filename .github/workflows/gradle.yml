@@ -92,6 +92,7 @@ jobs:
                     export GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} &&
                     export GOOGLE_GRANT_TYPE=${{ secrets.GOOGLE_GRANT_TYPE }} &&
                     export GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }} &&
-                    java -jar ./libs/community-0.0.1-SNAPSHOT.jar 
+                    nohup java -jar ./libs/community-0.0.1-SNAPSHOT.jar > /home/ubuntu/RETURN.log 2>&1 &
+
 
 
