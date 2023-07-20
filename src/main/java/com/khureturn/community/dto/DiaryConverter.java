@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class DiaryConverter {
-
-    private static MemberRepository memberRepository;
     private static DiaryLikeService diaryLikeService;
     private static DiaryScrapService diaryScrapService;
     private static DiaryFileRepository diaryFileRepository;

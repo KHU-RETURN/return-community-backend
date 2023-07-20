@@ -21,15 +21,6 @@ public class DiaryCommentResponseDto {
 
 
     }
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class CommentListDto{
-        private List<CommentDto> CommentDtoList;
-
-    }
-
 
     @Builder
     @Getter

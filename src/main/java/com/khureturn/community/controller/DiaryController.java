@@ -59,28 +59,28 @@ public class DiaryController {
 
     // 일기장 메인화면 (기본 최신순)
     @GetMapping("/list")
-    public ResponseEntity<DiaryResponseDto.DiarySortDto> getDiaryList(@RequestParam(name = "cursor")int cursor, @RequestParam(name = "size")int size){
+    public ResponseEntity<List<DiaryResponseDto.DiarySortDto>> getDiaryList(@RequestParam(name = "cursor")int cursor, @RequestParam(name = "size")int size){
         List<Diary> diaryList = diaryService.getPage((long) cursor,size);
-        return ResponseEntity.ok((DiaryResponseDto.DiarySortDto) DiaryConverter.toDiarySortDto(diaryList));
+        return ResponseEntity.ok(DiaryConverter.toDiarySortDto(diaryList));
     }
 
     // 일기장 좋아요순
     @GetMapping("/likelist")
-    public ResponseEntity<DiaryResponseDto.DiarySortDto> getDiaryListByLike(@RequestParam(name = "cursor")int cursor,
+    public ResponseEntity<List<DiaryResponseDto.DiarySortDto>> getDiaryListByLike(@RequestParam(name = "cursor")int cursor,
                                                                             @RequestParam(name = "size")int size, @RequestParam(name = "search", required = false)String search,
                                                                             @RequestParam(name = "sort", defaultValue = "likecount")String sort){
         List<Diary> diaryList = diaryService.getPageByLike((long)cursor, size, search);
-        return ResponseEntity.ok((DiaryResponseDto.DiarySortDto) DiaryConverter.toDiarySortDto(diaryList));
+        return ResponseEntity.ok(DiaryConverter.toDiarySortDto(diaryList));
 
     }
 
     // 일기장 조회수순
     @GetMapping("/viewlist")
-    public ResponseEntity<DiaryResponseDto.DiarySortDto> getDiaryListByView(@RequestParam(name = "cursor")int cursor,
+    public ResponseEntity<List<DiaryResponseDto.DiarySortDto>> getDiaryListByView(@RequestParam(name = "cursor")int cursor,
                                                                             @RequestParam(name = "size")int size, @RequestParam(name = "search", required = false)String search,
                                                                             @RequestParam(name = "sort", defaultValue = "viewcount")String sort){
         List<Diary> diaryList = diaryService.getPageByView((long)cursor, size, search);
-        return ResponseEntity.ok((DiaryResponseDto.DiarySortDto) DiaryConverter.toDiarySortDto(diaryList));
+        return ResponseEntity.ok(DiaryConverter.toDiarySortDto(diaryList));
 
     }
 
