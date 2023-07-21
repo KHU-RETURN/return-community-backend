@@ -27,15 +27,19 @@ public class  Notice extends BaseEntity {
     @Column(columnDefinition = "INT DEFAULT 0")
     private int noticeScrapCount;
 
+    @Builder.Default
     @OneToMany(mappedBy ="notice")
     private List<NoticeFile> noticeFiles = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy ="notice")
     private List<NoticeLike> noticeLikes = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy ="notice")
     private List<NoticeScrap> noticeScraps = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy ="notice")
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
