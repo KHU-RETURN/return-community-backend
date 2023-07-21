@@ -36,8 +36,6 @@ public class DiaryController {
     @PostMapping("")
     public ResponseEntity<DiaryResponseDto.CreateDiaryDto> createDiary(Principal principal, @RequestPart(value = "mediaList", required= false)List<MultipartFile> mediaList,
                                                                        @RequestPart(value = "data")DiaryRequestDto.CreateDiaryDto data) throws IOException {
-
-
         Diary diary = diaryService.create(mediaList, data, principal);
         return ResponseEntity.ok(DiaryResponseDto.CreateDiaryDto.builder().postId(diary.getId()).build());
     }

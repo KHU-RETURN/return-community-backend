@@ -45,6 +45,7 @@ public class Member extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String phoneNumber;
+
     private String profileImg;
 
     @Enumerated(EnumType.STRING)

@@ -43,14 +43,18 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryFile> diaryFiles = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryScrap> diaryScraps = new ArrayList<>();
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<DiaryComment> diaryComments = new ArrayList<>();
 

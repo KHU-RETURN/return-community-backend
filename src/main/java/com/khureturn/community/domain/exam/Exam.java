@@ -26,14 +26,17 @@ public class Exam extends BaseEntity {
     @Column(columnDefinition = "INT DEFAULT 0")
     private int examScrapCount;
 
+    @Builder.Default
     @OneToMany(mappedBy ="exam", cascade = CascadeType.ALL)
     private List<ExamFile> examFiles = new ArrayList<>();
+
+    @Builder.Default
     @OneToMany(mappedBy ="exam", cascade = CascadeType.ALL)
     private List<ExamLike> examLikes = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy ="exam", cascade = CascadeType.ALL)
     private List<ExamScrap> examScraps = new ArrayList<>();
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")

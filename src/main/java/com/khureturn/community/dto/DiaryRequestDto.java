@@ -31,6 +31,15 @@ public class DiaryRequestDto {
         private Boolean isAnonymous;
     }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class DiaryGetDto{
+        private int cursor;
+        private int size;
+    }
+
 
 
 
