@@ -5,6 +5,7 @@ import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,13 @@ public class DiaryComment extends BaseEntity {
     private String diaryHashtag;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private DiaryComment parent;
+
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<DiaryComment> children = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
@@ -34,4 +42,6 @@ public class DiaryComment extends BaseEntity {
 
         this.diaryCommentContent = diaryCommentContent;
     }
+
+
 }

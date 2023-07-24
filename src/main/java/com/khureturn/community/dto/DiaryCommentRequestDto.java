@@ -23,4 +23,12 @@ public class DiaryCommentRequestDto {
         private String content;
     }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class CreateRecommentDto{
+        private String content;
+    }
+
 }

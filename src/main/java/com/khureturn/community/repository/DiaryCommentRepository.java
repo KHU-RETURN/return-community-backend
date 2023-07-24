@@ -10,13 +10,20 @@ import java.util.Optional;
 
 public interface DiaryCommentRepository extends JpaRepository<DiaryComment, Long> {
 
-    List<DiaryComment> findAllByDiary(Long diaryId);
+    List<DiaryComment> findAllByDiary(Diary diary);
 
-    void deleteByDiaryAndId(Long diaryId, Long diaryCommentId);
+    void deleteByDiaryAndId(Diary diary, Long diaryCommentId);
 
     DiaryComment findByIdAndDiary(Long diaryCommentId, Diary diary);
 
-    int countAllByDiary(Long diaryId);
+    DiaryComment findByIdAndDiaryAndParent(Long recommentId, Diary diary, DiaryComment parent);
+
+    int countAllByParent(DiaryComment parent);
+
+    void deleteByDiaryAndParentAndId(Diary diary, DiaryComment parent, Long recommendId);
+
+    List<DiaryComment> findAllByDiaryAndParent(Diary diary, DiaryComment parent);
+
 
 
 }

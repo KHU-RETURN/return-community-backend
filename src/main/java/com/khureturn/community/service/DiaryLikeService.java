@@ -8,8 +8,11 @@ import com.khureturn.community.exception.DuplicateInsertionException;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.DiaryLikeRepository;
 import com.khureturn.community.repository.DiaryRepository;
+import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.awt.*;
 
 
 @Service
@@ -17,11 +20,12 @@ import org.springframework.stereotype.Service;
 public class DiaryLikeService {
     private final DiaryRepository diaryRepository;
     private final DiaryLikeRepository diaryLikeRepository;
+    private final MemberRepository memberRepository;
 
     public void diaryLike(Long diaryId, Member member){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
-        if(diaryLikeRepository.existsDiaryLikeByMemberAndDiary(member.getMemberId(), diaryId)){
+        if(diaryLikeRepository.existsDiaryLikeByMemberAndDiary(member, diary)){
             throw new DuplicateInsertionException("이미 좋아요가 존재합니다.");
         }
 
@@ -38,7 +42,7 @@ public class DiaryLikeService {
     public void diaryUnlike(Long diaryId, Member member){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
-        DiaryLike diaryLike = diaryLikeRepository.findByMemberAndDiary(member.getMemberId(), diaryId)
+        DiaryLike diaryLike = diaryLikeRepository.findByMemberAndDiary(member, diary)
                 .orElseThrow(() -> new NotFoundException("좋아요를 찾을 수 없습니다"));
 
         diaryLikeRepository.delete(diaryLike);
@@ -47,7 +51,11 @@ public class DiaryLikeService {
     }
 
     public Boolean findDiaryLikeByMemberAndDiary(Long memberId, Long diaryId){
-        Boolean isLiked = diaryLikeRepository.existsDiaryLikeByMemberAndDiary(memberId, diaryId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()->new NotFoundException("Diary를 찾을 수 없습니다."));
+        Boolean isLiked = diaryLikeRepository.existsDiaryLikeByMemberAndDiary(member, diary);
         return isLiked;
     }
 

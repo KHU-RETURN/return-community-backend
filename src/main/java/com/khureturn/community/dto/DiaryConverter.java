@@ -4,6 +4,7 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryComment;
 import com.khureturn.community.domain.diary.DiaryFile;
+import com.khureturn.community.repository.DiaryCommentRepository;
 import com.khureturn.community.repository.DiaryFileRepository;
 import com.khureturn.community.repository.MemberRepository;
 import com.khureturn.community.service.DiaryCommentService;
@@ -24,6 +25,7 @@ public class DiaryConverter {
     private static DiaryFileRepository diaryFileRepository;
 
     private static DiaryCommentService diaryCommentService;
+    private static DiaryCommentRepository diaryCommentRepository;
     private static DiaryService diaryService;
 
     public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request, Member member){
@@ -72,7 +74,7 @@ public class DiaryConverter {
         List<DiaryResponseDto.DiarySortDto> sortList = new ArrayList<>();
         for(Diary d: diaryList){
             Member member = d.getMember();
-            DiaryFile diaryFile = diaryFileRepository.findByDiary(d.getId());
+            DiaryFile diaryFile = diaryFileRepository.findByDiary(d);
             String url = diaryFile.getDiaryOriginalUrl();
             List<String> list = Arrays.asList(url.split(","));
             Boolean isLiked = diaryLikeService.findDiaryLikeByMemberAndDiary(member.getMemberId(), d.getId());
@@ -104,9 +106,11 @@ public class DiaryConverter {
         List<DiaryCommentResponseDto.CommentDto> list = new ArrayList<>();
         for(DiaryComment c: diaryCommentList){
             Member member = c.getMember();
+            int reCommentCount = diaryCommentRepository.countAllByParent(c.getParent());
             DiaryCommentResponseDto.CommentDto comment = DiaryCommentResponseDto.CommentDto.builder()
                     .commentId(c.getId())
                     .content(c.getDiaryCommentContent())
+                    .recommentCount(reCommentCount)
                     .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
                     .createdDate(c.getCreatedAt())
                     .build();

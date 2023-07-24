@@ -1,6 +1,5 @@
 package com.khureturn.community.service;
 
-
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryComment;
@@ -8,6 +7,7 @@ import com.khureturn.community.dto.DiaryCommentRequestDto;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.DiaryCommentRepository;
 import com.khureturn.community.repository.DiaryRepository;
+import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +19,8 @@ import java.util.List;
 public class DiaryCommentService {
 
     private final DiaryRepository diaryRepository;
-
     private final DiaryCommentRepository diaryCommentRepository;
+    private final MemberRepository memberRepository;
 
     public DiaryComment create(Long diaryId, DiaryCommentRequestDto.CreateCommentDto request, Principal principal){
         Diary diary = diaryRepository.findById(diaryId)
@@ -38,20 +38,66 @@ public class DiaryCommentService {
     }
 
     public DiaryComment update(Long diaryId, Long diaryCommentId, DiaryCommentRequestDto.UpdateCommentDto request){
-        Diary diary = diaryRepository.findById(diaryId).get();
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
         DiaryComment diaryComment = diaryCommentRepository.findByIdAndDiary(diaryCommentId, diary);
         diaryComment.update(request.getContent());
         return diaryComment;
     }
 
     public List<DiaryComment> findAllByDiary(Long diaryId){
-        return diaryCommentRepository.findAllByDiary(diaryId);
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
+        return diaryCommentRepository.findAllByDiary(diary);
     }
 
     public void delete(Long diaryId, Long diaryCommentId){
         Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));;
-        diaryCommentRepository.deleteByDiaryAndId(diaryId, diaryCommentId);
+                .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
+        diaryCommentRepository.deleteByDiaryAndId(diary, diaryCommentId);
+    }
+
+    public DiaryComment createReComment(Principal principal, Long diaryId, Long commentId, DiaryCommentRequestDto.CreateRecommentDto request){
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
+        Member member = memberRepository.findByName(principal.getName());
+        DiaryComment diaryComment = diaryCommentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
+        DiaryComment diaryRecomment = DiaryComment.builder()
+                .diaryCommentContent(request.getContent())
+                .parent(diaryComment)
+                .diary(diary)
+                .member(member)
+                .build();
+
+        return diaryCommentRepository.save(diaryRecomment);
+
+    }
+
+    public DiaryComment updateReComment(Long diaryId, Long commentId, Long recommentId, DiaryCommentRequestDto.UpdateCommentDto request){
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
+        DiaryComment parent = diaryCommentRepository.findByIdAndDiary(commentId, diary);
+        DiaryComment reComment = diaryCommentRepository.findByIdAndDiaryAndParent(recommentId, diary, parent);
+        reComment.update(request.getContent());
+        return reComment;
+
+    }
+
+    public List<DiaryComment> findAllByDiaryAndComment(Long diaryId, Long commentId){
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
+        DiaryComment parent = diaryCommentRepository.findByIdAndDiary(commentId, diary);
+        List<DiaryComment> reCommentList = diaryCommentRepository.findAllByDiaryAndParent(diary, parent);
+        return reCommentList;
+    }
+
+    public void deleteRecomment(Long diaryId, Long commentId, Long recommentId){
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다."));
+        DiaryComment parent = diaryCommentRepository.findByIdAndDiary(commentId, diary);
+        diaryCommentRepository.deleteByDiaryAndParentAndId(diary, parent, recommentId);
+
     }
 
 
