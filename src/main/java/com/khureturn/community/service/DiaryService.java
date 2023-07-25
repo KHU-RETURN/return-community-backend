@@ -80,7 +80,7 @@ public class DiaryService{
 
     public List<Diary> getPageByLike(Long cursorId, int size, String search){
         PageRequest pageRequest = PageRequest.of(0,size);
-        Page<Diary> fetchPages = diaryRepository.findByDiaryContentContainingIgnoreCaseAndIdLessThanOrderByDiaryLikeCountDesc(search, cursorId,pageRequest);
+        Page<Diary> fetchPages = diaryRepository.findByDiaryContentContainingIgnoreCaseAndIdLessThanOrderByDiaryLikeCountDesc(search, cursorId, pageRequest);
         return fetchPages.getContent();
     }
 

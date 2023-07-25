@@ -45,6 +45,42 @@ public class DiaryCommentController {
         return ResponseEntity.ok().build();
     }
 
+    // 대댓글 작성
+    @PostMapping("/diary/{postId}/comment/{commentId}/recomment")
+    public ResponseEntity<DiaryCommentResponseDto.CreateDiaryCommentDto> createReComment(Principal principal, @PathVariable(name = "postId")Long postId,
+                                                                                         @PathVariable(name = "commentId")Long commentId,
+                                                                                         @RequestBody DiaryCommentRequestDto.CreateRecommentDto request){
+
+        DiaryComment diaryComment = diaryCommentService.createReComment(principal, postId, commentId, request);
+        return ResponseEntity.ok(DiaryCommentResponseDto.CreateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
+    }
+
+    // 대댓글 조회
+    @GetMapping("/diary/{postId}/comment/{commentId}/recomment")
+    public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getRecomment(@PathVariable(name = "postId")Long postId,
+                                                                                 @PathVariable(name = "commentId")Long commentId){
+        List<DiaryComment> commentList = diaryCommentService.findAllByDiaryAndComment(postId, commentId);
+        return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
+    }
+
+
+    @PatchMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
+    public ResponseEntity<DiaryCommentResponseDto.UpdateDiaryCommentDto> updateRecomment(@PathVariable(name = "postId")Long postId,
+                                                                                         @PathVariable(name = "commentId")Long commentId,
+                                                                                         @PathVariable(name = "recommentId")Long recommentId,
+                                                                                         @RequestBody DiaryCommentRequestDto.UpdateCommentDto request){
+        DiaryComment diaryComment = diaryCommentService.updateReComment(postId, commentId, recommentId, request);
+        return ResponseEntity.ok(DiaryCommentResponseDto.UpdateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
+    }
+
+    @DeleteMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
+    public ResponseEntity<Void> deleteRecomment(@PathVariable(name = "postId")Long postId,
+                                                @PathVariable(name = "commentId")Long commentId,
+                                                @PathVariable(name = "recommentId")Long recommentId){
+        diaryCommentService.deleteRecomment(postId, commentId, recommentId);
+        return ResponseEntity.ok().build();
+    }
+
 
 
 }

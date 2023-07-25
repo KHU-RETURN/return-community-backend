@@ -15,7 +15,7 @@ public class DiaryCommentResponseDto {
     public static class CommentDto{
         private Long commentId;
         private String content;
-        //private Long recommentCount;
+        private int recommentCount;
         private MemberResponseDto.MemberDto user;
         private LocalDateTime createdDate;
 
@@ -40,13 +40,6 @@ public class DiaryCommentResponseDto {
 
     }
 
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class DeleteDiaryCommentDto{
-        private Long commentId;
 
-    }
 
 }
