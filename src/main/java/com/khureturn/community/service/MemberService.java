@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -48,9 +49,9 @@ public class MemberService {
     public ResponseEntity<?> signUp(String signUpRequest, MultipartFile profileImg, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
 
-        MemberRequestDto.SignUpRequestDto signUpRequestDto = transformUserInformationToObject(signUpRequest);
+        MemberRequestDto.SignUpRequestDto signUpRequestDto = transformSignUpInformationToObject(signUpRequest);
 
-        validateUserInformation(signUpRequestDto);
+        validateSignUpInformation(signUpRequestDto);
 
         String profileImgURL = null;
 
@@ -88,7 +89,7 @@ public class MemberService {
                 .build();
     }
 
-    private MemberRequestDto.SignUpRequestDto transformUserInformationToObject(String signUpRequest) {
+    private MemberRequestDto.SignUpRequestDto transformSignUpInformationToObject(String signUpRequest) {
 
         ObjectMapper mapper = new ObjectMapper();
         MemberRequestDto.SignUpRequestDto signUpRequestDto;
@@ -103,7 +104,42 @@ public class MemberService {
     }
 
 
-    public void validateUserInformation(MemberRequestDto.SignUpRequestDto signUpRequestDto) {
+    private MemberRequestDto.UpdateRequestDto transformUpdateInformationToObject(String updateRequest) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        MemberRequestDto.UpdateRequestDto updateRequestDto;
+
+        try {
+            updateRequestDto = mapper.readerFor(MemberRequestDto.UpdateRequestDto.class).readValue(updateRequest);
+        } catch (Exception e) {
+            throw new ServerInternalException(e.getMessage());
+        }
+
+        return updateRequestDto;
+    }
+
+
+
+
+
+
+
+    public void validateUpdateInformation(MemberRequestDto.UpdateRequestDto updateRequestDto, String googleSub) {
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<MemberRequestDto.UpdateRequestDto>> violations = validator.validate(updateRequestDto);
+
+        for (ConstraintViolation<MemberRequestDto.UpdateRequestDto> violation : violations) {
+            throw new MissingFormatArgumentException(String.valueOf(violation.getPropertyPath()));
+        }
+
+        validatePhoneNumber(updateRequestDto.getPhoneNumber(), googleSub);
+        validateEmail(updateRequestDto.getEmail(), googleSub);
+
+    }
+
+    public void validateSignUpInformation(MemberRequestDto.SignUpRequestDto signUpRequestDto) {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -174,4 +210,53 @@ public class MemberService {
                 .isPaid(member.isPaid())
                 .build();
     }
+
+
+    public ResponseEntity<Void> updateProfile(String googleSub, String updateRequestDto, MultipartFile newProfileImg) {
+
+        Member member = memberRepository.findByGoogleSub(googleSub).orElseThrow(InvalidAccessTokenException::new);
+
+        MemberRequestDto.UpdateRequestDto updateUserRequestDto = transformUpdateInformationToObject(updateRequestDto);
+
+        validateUpdateInformation(updateUserRequestDto, googleSub );
+
+        String toSetProfileImgUrl = null;
+
+        String currentProfileImgUrl = member.getProfileImg();
+
+
+        if (updateUserRequestDto.getIsProfileImgChanged()) {
+            if (currentProfileImgUrl != null && newProfileImg == null) {
+                List<String> url = new ArrayList<>();
+                url.add(currentProfileImgUrl);
+                mediaService.deleteMedias(url);
+            }
+
+            else if (currentProfileImgUrl == null && newProfileImg != null) {
+                toSetProfileImgUrl = mediaService.uploadProfileImg(newProfileImg, UploadType.PROFILE_IMG);
+            }
+
+            else if (currentProfileImgUrl != null && newProfileImg != null) {
+                List<String> url = new ArrayList<>();
+                url.add(currentProfileImgUrl);
+                mediaService.deleteMedias(url);
+                toSetProfileImgUrl = mediaService.uploadProfileImg(newProfileImg, UploadType.PROFILE_IMG);
+
+            }
+
+        } else {
+            toSetProfileImgUrl = currentProfileImgUrl;
+
+        }
+
+        member.transferUpdateDtoToMember(updateUserRequestDto, toSetProfileImgUrl);
+
+        memberRepository.save(member);
+
+        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+
+    }
+
+
+
 }

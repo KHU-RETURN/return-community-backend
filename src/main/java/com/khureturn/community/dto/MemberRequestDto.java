@@ -23,4 +23,25 @@ public class MemberRequestDto {
         private Long studentId;
 
     }
+
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UpdateRequestDto {
+
+        @NotNull
+        private String phoneNumber;
+        @NotNull
+        private String email;
+        @NotNull
+        private String name;
+        @NotNull
+        private Long studentId;
+        @NotNull
+        private Boolean isProfileImgChanged;
+
+
+    }
 }
