@@ -6,6 +6,7 @@ import com.khureturn.community.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,6 +20,7 @@ public class DiaryScrapController {
     private final DiaryScrapService diaryScrapService;
     private final MemberService memberService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{postId}/bookmark")
     public ResponseEntity<Void> createLike(Principal principal, @PathVariable(name = "postId")Long postId){
         String name = principal.getName();
@@ -27,6 +29,7 @@ public class DiaryScrapController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}/bookmark")
     public ResponseEntity<Void> deleteLike(Principal principal, @PathVariable(name = "postId")Long postId){
         String name = principal.getName();

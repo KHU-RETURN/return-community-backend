@@ -8,6 +8,7 @@ import com.khureturn.community.service.DiaryCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,25 +21,28 @@ public class DiaryCommentController {
 
     private final DiaryCommentService diaryCommentService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/diary/{postId}/comment")
     public ResponseEntity<DiaryCommentResponseDto.CreateDiaryCommentDto> createComment(Principal principal, @PathVariable(name = "postId")Long postId, @RequestBody DiaryCommentRequestDto.CreateCommentDto request){
         DiaryComment diaryComment = diaryCommentService.create(postId, request, principal);
         return ResponseEntity.ok(DiaryCommentResponseDto.CreateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/diary/{postId}/comment/{commentId}")
     public ResponseEntity<DiaryCommentResponseDto.UpdateDiaryCommentDto> updateComment(@PathVariable(name = "postId")Long postId, @PathVariable(name = "commentId")Long commentId, @RequestBody DiaryCommentRequestDto.UpdateCommentDto request){
         DiaryComment diaryComment = diaryCommentService.update(postId, commentId, request);
         return ResponseEntity.ok(DiaryCommentResponseDto.UpdateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
 
-    // 댓글 조회
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/diary/{postId}/comment")
     public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getComment(@PathVariable(name = "postId")Long postId){
         List<DiaryComment> commentList = diaryCommentService.findAllByDiary(postId);
         return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/diary/{postId}/comment/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable(name = "postId")Long postId, @PathVariable(name = "commentId")Long commentId){
         diaryCommentService.delete(postId,commentId);
@@ -46,6 +50,7 @@ public class DiaryCommentController {
     }
 
     // 대댓글 작성
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/diary/{postId}/comment/{commentId}/recomment")
     public ResponseEntity<DiaryCommentResponseDto.CreateDiaryCommentDto> createReComment(Principal principal, @PathVariable(name = "postId")Long postId,
                                                                                          @PathVariable(name = "commentId")Long commentId,
@@ -56,6 +61,7 @@ public class DiaryCommentController {
     }
 
     // 대댓글 조회
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/diary/{postId}/comment/{commentId}/recomment")
     public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getRecomment(@PathVariable(name = "postId")Long postId,
                                                                                  @PathVariable(name = "commentId")Long commentId){
@@ -63,7 +69,7 @@ public class DiaryCommentController {
         return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
     public ResponseEntity<DiaryCommentResponseDto.UpdateDiaryCommentDto> updateRecomment(@PathVariable(name = "postId")Long postId,
                                                                                          @PathVariable(name = "commentId")Long commentId,
@@ -72,7 +78,7 @@ public class DiaryCommentController {
         DiaryComment diaryComment = diaryCommentService.updateReComment(postId, commentId, recommentId, request);
         return ResponseEntity.ok(DiaryCommentResponseDto.UpdateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
-
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
     public ResponseEntity<Void> deleteRecomment(@PathVariable(name = "postId")Long postId,
                                                 @PathVariable(name = "commentId")Long commentId,

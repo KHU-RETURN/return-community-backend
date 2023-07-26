@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.ModCheck;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,7 @@ public class DiaryController {
 
     private final MemberService memberService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("")
     public ResponseEntity<DiaryResponseDto.CreateDiaryDto> createDiary(Principal principal, @RequestPart(value = "mediaList", required= false)List<MultipartFile> mediaList,
                                                                        @RequestPart(value = "data")DiaryRequestDto.CreateDiaryDto data) throws IOException {
@@ -40,13 +42,16 @@ public class DiaryController {
         return ResponseEntity.ok(DiaryResponseDto.CreateDiaryDto.builder().postId(diary.getId()).build());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{postId}")
     public ResponseEntity<DiaryResponseDto.UpdateDiaryDto> updateDiary(@PathVariable(name = "postId")Long postId, @RequestBody DiaryRequestDto.UpdateDiaryDto data){
         Diary diary = diaryService.update(postId, data);
         return ResponseEntity.ok(DiaryResponseDto.UpdateDiaryDto.builder().postId(diary.getId()).build());
     }
 
+
     // 일기장 상세조회
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{postId}")
     public ResponseEntity<DiaryResponseDto.DiaryDto> getDiary(@PathVariable(name = "postId") Long postId){
         Diary diary = diaryService.findById(postId);
@@ -81,7 +86,7 @@ public class DiaryController {
         return ResponseEntity.ok(DiaryConverter.toDiarySortDto(diaryList));
 
     }
-
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deleteDiary(@PathVariable(name = "postId")Long postId){
         diaryService.delete(postId);
