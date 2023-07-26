@@ -78,6 +78,7 @@ public class DiaryCommentController {
         DiaryComment diaryComment = diaryCommentService.updateReComment(postId, commentId, recommentId, request);
         return ResponseEntity.ok(DiaryCommentResponseDto.UpdateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
+
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
     public ResponseEntity<Void> deleteRecomment(@PathVariable(name = "postId")Long postId,
