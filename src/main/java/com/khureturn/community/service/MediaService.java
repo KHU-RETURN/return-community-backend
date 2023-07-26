@@ -80,6 +80,22 @@ public class MediaService {
         }
     }
 
+    public void deleteMedias(List<String> fileNames) {
+        for (String fileName : fileNames) {
+            File savedFile = new File(MAIN_DIR_NAME + fileName);
+            if (savedFile.exists()) {
+                if (savedFile.delete()) {
+                    log.info("파일삭제 성공. filename : {}", fileName);
+                } else {
+                    log.info("파일삭제 실패. filename : {}", fileName);
+                }
+            } else {
+                log.info("파일이 존재하지 않습니다. filename : {}", fileName);
+            }
+        }
+    }
+
+
 
 
 
