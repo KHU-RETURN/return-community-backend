@@ -70,6 +70,15 @@ public class Member extends BaseEntity {
     }
 
 
+    public void transferUpdateDtoToMember(MemberRequestDto.UpdateRequestDto updateRequestDto, String profileImg){
+        this.studentId = String.valueOf(updateRequestDto.getStudentId());
+        this.name = updateRequestDto.getName();
+        this.email = updateRequestDto.getEmail();
+        this.phoneNumber = updateRequestDto.getPhoneNumber();
+        this.profileImg = profileImg;
+    }
+
+
     @OneToMany(mappedBy ="member")
     private List<Diary> diarys = new ArrayList<>();
 

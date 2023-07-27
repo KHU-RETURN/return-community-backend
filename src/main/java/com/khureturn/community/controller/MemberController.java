@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-
+import java.util.List;
 
 
 @Slf4j
@@ -31,12 +32,23 @@ public class MemberController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/profile/detail")
+    @GetMapping("/profile")
     public ResponseEntity<MemberResponseDto.FullUserInformationResponse> fullUserInformation(Principal principal) {
         log.info(principal.getName());
         return ResponseEntity.ok().body(memberService.getFullUserInformation(principal.getName()));
     }
 
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> profileUpdate(
+            Principal principal,
+            @RequestPart String updateRequest,
+            @RequestPart(required = false) MultipartFile profileImg) {
+        log.info(principal.getName());
+
+        return memberService.updateProfile(principal.getName(), updateRequest, profileImg);
+    }
 
 
 
