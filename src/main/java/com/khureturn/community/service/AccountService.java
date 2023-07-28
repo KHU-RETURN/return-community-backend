@@ -115,7 +115,7 @@ public class AccountService {
         JSONObject jsonObject = (JSONObject) jsonParser.parse(GoogleUserinfo.getBody());
         log.info(jsonObject.toJSONString());
         UserInfoDto dto = new UserInfoDto();
-        dto.setGoogldSub(jsonObject.get("sub").toString());
+        dto.setGoogleSub(jsonObject.get("sub").toString());
 
         if (jsonObject.containsKey("email")) {
             dto.setEmail(jsonObject.get("email").toString());
@@ -136,7 +136,7 @@ public class AccountService {
             log.info("기존 프로필 사진을 불러올 수 없음");
             dto.setProfileImgURL(null);
         }
-        if (!userRepository.existsByGoogleSub(dto.getGoogldSub())) {
+        if (!userRepository.existsByGoogleSub(dto.getGoogleSub())) {
             log.info("유저 정보가 없음");
             if(isValidEmail(dto.getEmail())){
                 return ResponseEntity.status(200).body(dto);
@@ -147,7 +147,7 @@ public class AccountService {
             }
         } else {
             log.info("유저 정보가 있다.");
-            String accessToken = jwtTokenProvider.createAccessToken(dto.getGoogldSub());
+            String accessToken = jwtTokenProvider.createAccessToken(dto.getGoogleSub());
             HttpHeaders httpHeaders = new HttpHeaders();
             Cookie cookie = new Cookie("authorization", accessToken);
             int expireTime = 604800;
@@ -157,8 +157,8 @@ public class AccountService {
             httpServletResponse.addCookie(cookie);
 
 
-            redisService.setDataWithExpiration(dto.getGoogldSub(), accessToken, expireTime);
-            Member member = userRepository.findByGoogleSub(dto.getGoogldSub()).get();
+            redisService.setDataWithExpiration(dto.getGoogleSub(), accessToken, expireTime);
+            Member member = userRepository.findByGoogleSub(dto.getGoogleSub()).get();
             MemberResponseDto.GoogleAccountInfoDto googleAccountInfoDto = MemberResponseDto.GoogleAccountInfoDto.builder()
                     .memberId(member.getMemberId())
                     .profileImgURL(member.getProfileImg())
