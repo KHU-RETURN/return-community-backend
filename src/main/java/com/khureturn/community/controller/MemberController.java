@@ -72,6 +72,16 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/validate-nickname/{nickname}")
+    public ResponseEntity<Void> validateNickanme(Principal principal, @PathVariable String nickname){
+        String username = null;
+        if(principal != null){
+            username = principal.getName();
+        }
+        memberService.validateNickname(nickname, username);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping(value = "/sign-up", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> signUp(
             Principal principal,
