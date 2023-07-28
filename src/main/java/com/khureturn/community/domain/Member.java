@@ -41,6 +41,9 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(unique = true, nullable = false)
+    private String nickname;
+
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(unique = true, nullable = false)
@@ -61,6 +64,7 @@ public class Member extends BaseEntity {
         this.studentId = String.valueOf(signUpRequestDto.getStudentId());
         this.googleSub = signUpRequestDto.getGoogleSub();
         this.name = signUpRequestDto.getName();
+        this.nickname = signUpRequestDto.getNickname();
         this.email = signUpRequestDto.getEmail();
         this.phoneNumber = signUpRequestDto.getPhoneNumber();
         this.profileImg = profileImg;
@@ -74,6 +78,7 @@ public class Member extends BaseEntity {
         this.studentId = String.valueOf(updateRequestDto.getStudentId());
         this.name = updateRequestDto.getName();
         this.email = updateRequestDto.getEmail();
+        this.nickname = updateRequestDto.getNickname();
         this.phoneNumber = updateRequestDto.getPhoneNumber();
         this.profileImg = profileImg;
     }
