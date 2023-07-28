@@ -18,7 +18,9 @@ public enum ErrCode {
     DUPLICATED_PHONE_NUMBER("RE012", "사용중인 전화번호입니다."),
     DUPLICATED_EMAIL("RE013", "사용중인 이메일입니다."),
 
-    INVALID_MEDIA_TYPE("RE014", "허용되지 않은 미디어 타입"),
+    DUPLICATED_NICKNAME("RE014", "사용중인 닉네임입니다."),
+
+    INVALID_MEDIA_TYPE("RE015", "허용되지 않은 미디어 타입"),
 
 
     INTERNAL_SERVER_ERROR("RE500", "서버 요청 처리 실패.");

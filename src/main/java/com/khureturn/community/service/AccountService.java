@@ -163,6 +163,7 @@ public class AccountService {
                     .memberId(member.getMemberId())
                     .profileImgURL(member.getProfileImg())
                     .name(member.getName())
+                    .nickname(member.getNickname())
                     .phoneNumber(member.getPhoneNumber())
                     .build();
             return new ResponseEntity<MemberResponseDto.GoogleAccountInfoDto>(googleAccountInfoDto, httpHeaders, HttpStatus.OK);

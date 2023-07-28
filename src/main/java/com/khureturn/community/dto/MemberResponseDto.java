@@ -11,8 +11,13 @@ public class MemberResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class GoogleAccountInfoDto {
         private Long memberId;
+
         private String profileImgURL;
+
         private String name;
+
+        private String nickname;
+
         private String phoneNumber;
     }
 
@@ -23,10 +28,14 @@ public class MemberResponseDto {
     @NoArgsConstructor
     public static class MemberBriefInfoDto{
         private Long memberId;
-        private String studentId;
-        private String name;
-        private String profileImgURL;
 
+        private String studentId;
+
+        private String name;
+
+        private String nickname;
+
+        private String profileImgURL;
     }
 
     @Builder
@@ -36,21 +45,23 @@ public class MemberResponseDto {
     public static class FullUserInformationResponse{
 
 
-        String name;
+        private String name;
 
-        String phoneNumber;
+        private String nickname;
 
-        String email;
+        private String phoneNumber;
 
-        String studentId;
+        private String email;
 
-        RoleStatus role;
+        private String studentId;
 
-        ManagerStatus managerType;
+        private RoleStatus role;
 
-        Boolean isPaid;
+        private ManagerStatus managerType;
 
-        String profileImgURL;
+        private Boolean isPaid;
+
+        private String profileImgURL;
     }
     @Builder
     @Getter
@@ -60,6 +71,7 @@ public class MemberResponseDto {
         private Long memberId;
         private String profileImgURL;
         private String name;
+        private String nickname;
         private String phoneNumber;
 
     }
@@ -72,6 +84,7 @@ public class MemberResponseDto {
         private Long memberId;
         private String profileImgURL;
         private String name;
+        private String nickname;
 
     }
 

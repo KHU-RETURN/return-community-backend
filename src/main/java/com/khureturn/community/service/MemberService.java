@@ -5,6 +5,7 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.common.UploadType;
 import com.khureturn.community.dto.MemberRequestDto;
 import com.khureturn.community.dto.MemberResponseDto;
+import com.khureturn.community.exception.ErrCode;
 import com.khureturn.community.exception.Member.FailedMemberInfo;
 import com.khureturn.community.exception.Member.InvalidMemberInfoException;
 import com.khureturn.community.exception.ServerInternalException;
@@ -84,6 +85,7 @@ public class MemberService {
         return MemberResponseDto.MemberBriefInfoDto.builder()
                 .memberId(member.getMemberId())
                 .studentId(member.getStudentId())
+                .nickname(member.getNickname())
                 .name(member.getName())
                 .profileImgURL(member.getProfileImg())
                 .build();
@@ -136,6 +138,7 @@ public class MemberService {
 
         validatePhoneNumber(updateRequestDto.getPhoneNumber(), googleSub);
         validateEmail(updateRequestDto.getEmail(), googleSub);
+        validateNickname(updateRequestDto.getNickname(), googleSub);
 
     }
 
@@ -151,6 +154,7 @@ public class MemberService {
 
         validatePhoneNumber(signUpRequestDto.getPhoneNumber(), null);
         validateEmail(signUpRequestDto.getEmail(), null);
+        validateNickname(signUpRequestDto.getNickname(), null);
 
     }
 
@@ -193,6 +197,22 @@ public class MemberService {
         }
     }
 
+
+
+    public void validateNickname(String nickname, String googleSub){
+        if(googleSub != null){
+            String  currentNickname = memberRepository.findByGoogleSub(googleSub).orElseThrow(InvalidAccessTokenException::new).getNickname();
+            if(currentNickname.equals(nickname)){
+                return;
+            }
+        }
+        Optional<Member> member = memberRepository.findByNickname(nickname);
+        if(member.isPresent()){
+            throw new InvalidMemberInfoException(ErrCode.DUPLICATED_NICKNAME);
+        }
+
+    }
+
     public Member findByName(String name) {
         return memberRepository.findByName(name);
     }
@@ -201,6 +221,7 @@ public class MemberService {
         Member member = memberRepository.findByGoogleSub(username).orElseThrow(InvalidAccessTokenException::new);
         return MemberResponseDto.FullUserInformationResponse.builder()
                 .name(member.getName())
+                .nickname(member.getNickname())
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
                 .studentId(member.getStudentId())

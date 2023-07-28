@@ -15,10 +15,16 @@ public class MemberRequestDto {
 
         @NotNull
         private String phoneNumber;
+
         @NotNull
         private String email;
+
         @NotNull
         private String name;
+
+        @NotNull
+        private String nickname;
+
         @NotNull
         private Long studentId;
 
@@ -33,15 +39,20 @@ public class MemberRequestDto {
 
         @NotNull
         private String phoneNumber;
+
         @NotNull
         private String email;
+
         @NotNull
         private String name;
+
+        @NotNull
+        private String nickname;
+
         @NotNull
         private Long studentId;
+
         @NotNull
         private Boolean isProfileImgChanged;
-
-
     }
 }

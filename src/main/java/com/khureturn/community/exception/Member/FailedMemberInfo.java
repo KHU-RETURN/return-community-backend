@@ -6,6 +6,7 @@ public enum FailedMemberInfo {
     PHONENUMBER(ErrCode.INVALID_PHONE_NUMBER_FORMAT, ErrCode.DUPLICATED_PHONE_NUMBER),
     EMAIL(ErrCode.INVALID_EMAIL_FORMAT, ErrCode.DUPLICATED_EMAIL);
 
+
     private final ErrCode invalid_format_errorCode;
     private final ErrCode duplicated_errorCode;
 
