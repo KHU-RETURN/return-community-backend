@@ -16,11 +16,10 @@ public class ConfigureImp implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000", "http://localhost:8080")
-                .allowedOrigins("*")
-                .allowedHeaders("authorization", "authorization-refresh", "User-Agent", "Cache-Control", "Content-Type")
-                .exposedHeaders("authorization", "authorization-refresh", "User-Agent", "Cache-Control", "Content-Type")
-                .allowedMethods("*");
-        //.allowCredentials(true);
+                .allowedHeaders("authorization", "User-Agent", "Cache-Control", "Content-Type")
+                .exposedHeaders("authorization", "User-Agent", "Cache-Control", "Content-Type")
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 
     @Override

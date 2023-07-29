@@ -12,7 +12,7 @@ import lombok.*;
 public class UserInfoDto {
     private String fullname;
 
-    private String googldSub;
+    private String googleSub;
 
     private String email;
 
