@@ -93,8 +93,7 @@ public class WebSecurityConfig{
         configuration.addExposedHeader("authorization");
         configuration.addExposedHeader("User-Agent");
         configuration.addExposedHeader("Content-Type");
-
-//        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
