@@ -39,7 +39,7 @@ public class DiaryCommentController {
     @GetMapping("/diary/{postId}/comment")
     public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getComment(@PathVariable(name = "postId")Long postId){
         List<DiaryComment> commentList = diaryCommentService.findAllByDiary(postId);
-        return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
+        return ResponseEntity.ok(diaryCommentService.getCommentList(commentList));
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -66,7 +66,7 @@ public class DiaryCommentController {
     public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getRecomment(@PathVariable(name = "postId")Long postId,
                                                                                  @PathVariable(name = "commentId")Long commentId){
         List<DiaryComment> commentList = diaryCommentService.findAllByDiaryAndComment(postId, commentId);
-        return ResponseEntity.ok(DiaryConverter.toCommentListDto(commentList));
+        return ResponseEntity.ok(diaryCommentService.getCommentList(commentList));
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -50,13 +50,4 @@ public class DiaryLikeService {
 
     }
 
-    public Boolean findDiaryLikeByMemberAndDiary(Long memberId, Long diaryId){
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(()->new NotFoundException("Diary를 찾을 수 없습니다."));
-        Boolean isLiked = diaryLikeRepository.existsDiaryLikeByMemberAndDiary(member, diary);
-        return isLiked;
-    }
-
 }

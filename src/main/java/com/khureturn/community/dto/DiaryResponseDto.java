@@ -10,6 +10,7 @@ public class DiaryResponseDto {
 
     @Builder
     @Getter
+    @Setter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DiaryDto{
@@ -60,6 +61,7 @@ public class DiaryResponseDto {
 
     @Builder
     @Getter
+    @Setter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class DiarySortDto{

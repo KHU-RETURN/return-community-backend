@@ -4,8 +4,6 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,16 +14,17 @@ import java.util.List;
 @Getter
 public class Diary extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diary_id")
     private Long id;
 
-    @Column(nullable = false)
     private String diaryTitle;
     private String diaryContent;
 
     private Boolean isAnonymous;
 
+    // thumbnailIndex 선택 안하면 0으로 default
+    @Column(columnDefinition = "INT DEFAULT 0")
     private int thumbnailIndex;
 
     @Column(columnDefinition = "INT DEFAULT 0")

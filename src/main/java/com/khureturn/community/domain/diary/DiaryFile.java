@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 public class DiaryFile extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diary_file_id")
     private Long id;
     private String diaryOriginalUrl;

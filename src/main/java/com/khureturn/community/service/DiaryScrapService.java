@@ -21,7 +21,7 @@ public class DiaryScrapService {
     public void diaryScrap(Long diaryId, Member member){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
-        if(diaryScrapRepository.existsDiaryScrapByMemberAndDiary(member.getMemberId(), diaryId)){
+        if(diaryScrapRepository.existsDiaryScrapByMemberAndDiary(member, diary)){
             throw new DuplicateInsertionException("이미 스크랩이 완료되었습니다.");
         }
 
@@ -38,7 +38,7 @@ public class DiaryScrapService {
     public void diaryUnScrap(Long diaryId, Member member){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
-        DiaryScrap diaryScrap = diaryScrapRepository.findByMemberAndDiary(member.getMemberId(), diaryId)
+        DiaryScrap diaryScrap = diaryScrapRepository.findByMemberAndDiary(member, diary)
                 .orElseThrow(() -> new NotFoundException("스크랩을 찾을 수 없습니다"));
 
         diaryScrapRepository.delete(diaryScrap);
@@ -46,8 +46,4 @@ public class DiaryScrapService {
 
     }
 
-    public Boolean findDiaryScrapByMemberAndDiary(Long memberId, Long diaryId){
-        Boolean isBookmarked = diaryScrapRepository.existsDiaryScrapByMemberAndDiary(memberId, diaryId);
-        return isBookmarked;
-    }
 }

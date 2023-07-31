@@ -4,6 +4,8 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryComment;
 import com.khureturn.community.dto.DiaryCommentRequestDto;
+import com.khureturn.community.dto.DiaryCommentResponseDto;
+import com.khureturn.community.dto.MemberResponseDto;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.DiaryCommentRepository;
 import com.khureturn.community.repository.DiaryRepository;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -82,6 +85,23 @@ public class DiaryCommentService {
         reComment.update(request.getContent());
         return reComment;
 
+    }
+
+    public List<DiaryCommentResponseDto.CommentDto> getCommentList(List<DiaryComment> diaryCommentList){
+        List<DiaryCommentResponseDto.CommentDto> list = new ArrayList<>();
+        for(DiaryComment c: diaryCommentList){
+            Member member = c.getMember();
+            int reCommentCount = diaryCommentRepository.countAllByParent(c.getParent());
+            DiaryCommentResponseDto.CommentDto comment = DiaryCommentResponseDto.CommentDto.builder()
+                    .commentId(c.getId())
+                    .content(c.getDiaryCommentContent())
+                    .recommentCount(reCommentCount)
+                    .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
+                    .createdDate(c.getCreatedAt())
+                    .build();
+            list.add(comment);
+        }
+        return list;
     }
 
     public List<DiaryComment> findAllByDiaryAndComment(Long diaryId, Long commentId){
