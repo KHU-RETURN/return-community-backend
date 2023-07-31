@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface DiaryScrapRepository extends JpaRepository<DiaryScrap, Long> {
 
-    boolean existsDiaryScrapByMemberAndDiary(Long memberId, Long diaryId);
+    boolean existsDiaryScrapByMemberAndDiary(Member member, Diary diary);
 
-    Optional<DiaryScrap> findByMemberAndDiary(Long memberId, Long diaryId);
+    Optional<DiaryScrap> findByMemberAndDiary(Member member, Diary diary);
 
 }

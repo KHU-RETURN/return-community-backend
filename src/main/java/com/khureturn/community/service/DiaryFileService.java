@@ -24,8 +24,8 @@ public class DiaryFileService {
 
     public static String fileUpload(List<MultipartFile> medias) throws IOException {
 
-        String rootPath = System.getProperty("user.dir");
-        String fileDir = rootPath + "/medias/";
+        String rootPath = System.getProperty("user.dir") + "/src/main/webapp/WEB-INF";
+        String fileDir = rootPath + "/static/thumbnailDiaryMedia";
         List<String> list = new ArrayList<>();
         for(MultipartFile media: medias){
             File saveMedia = new File(fileDir, media.getOriginalFilename());

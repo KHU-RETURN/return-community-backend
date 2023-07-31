@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 public class DiaryScrap {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="diary_scrap_id")
     private Long id;
 

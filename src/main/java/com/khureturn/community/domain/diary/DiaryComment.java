@@ -15,8 +15,7 @@ import java.util.List;
 @Getter
 public class DiaryComment extends BaseEntity {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diary_comment_id")
     private Long id;
     private String diaryCommentContent;
