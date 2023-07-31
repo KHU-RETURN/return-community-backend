@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,11 +38,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//모든 서�
             return;
         }
 
-        String accessToken = jwtProvider.extractAccessTokenFromCookie(request);
+        Optional<String> accessToken= jwtProvider.extractAccessToken(request);
         boolean isAccessToken = false;
-        if (accessToken != null) {
+        if (accessToken.isPresent()) {
             try {
-                isAccessToken = jwtProvider.validateToken(accessToken);
+                isAccessToken = jwtProvider.validateToken(accessToken.get());
             } catch (ExpiredJwtException e) {
                 request.setAttribute("exception", "ExpiredJwtException"); //만료 에러.
                 filterChain.doFilter(request, response);
@@ -56,11 +57,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//모든 서�
             if (isAccessToken == false) {
                 request.setAttribute("exception", "AccessJwtException"); //엑세스 토큰이 아니기에 예외 반환.
             }
-            else if(redisService.hasKeyBlackListToken(accessToken)){
+            else if(redisService.hasKeyBlackListToken(accessToken.get())){
                 request.setAttribute("exception", "AccessJwtException"); //블랙리스트에 있는 토큰이기에 예외 반환.
             }
             else {
-                String username = jwtProvider.getUsername(accessToken);
+                String username = jwtProvider.getGoogleSub(accessToken.get());
                 try {
                     UserDetails userDetails = principalService.loadUserByUsername(username);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());

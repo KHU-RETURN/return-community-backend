@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,6 +53,7 @@ public class WebSecurityConfig{
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable().authorizeHttpRequests()
+                .requestMatchers(HttpMethod.OPTIONS).permitAll() //PreFlight Request 요청 허용
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().permitAll()
                 .and()
@@ -82,16 +84,16 @@ public class WebSecurityConfig{
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000", "http://khu-return.site:8080", "https://khu-return.site"));
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*");
 
-        configuration.addAllowedHeader("authorization");
-        configuration.addAllowedHeader("User-Agent");
+        configuration.addAllowedHeader("Authorization");
         configuration.addAllowedHeader("Content-Type");
+        configuration.addExposedHeader("Cache-Control");
 
         configuration.addExposedHeader("authorization");
-        configuration.addExposedHeader("User-Agent");
+        configuration.addExposedHeader("Cache-Control");
         configuration.addExposedHeader("Content-Type");
         configuration.setAllowCredentials(true);
 

@@ -23,6 +23,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -149,15 +150,8 @@ public class AccountService {
             log.info("유저 정보가 있다.");
             String accessToken = jwtTokenProvider.createAccessToken(dto.getGoogleSub());
             HttpHeaders httpHeaders = new HttpHeaders();
-            Cookie cookie = new Cookie("authorization", accessToken);
-            int expireTime = 604800;
-            cookie.setMaxAge(expireTime);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            httpServletResponse.addCookie(cookie);
+            httpHeaders.add("Authorization", accessToken);
 
-
-            redisService.setDataWithExpiration(dto.getGoogleSub(), accessToken, expireTime);
             Member member = userRepository.findByGoogleSub(dto.getGoogleSub()).get();
             MemberResponseDto.GoogleAccountInfoDto googleAccountInfoDto = MemberResponseDto.GoogleAccountInfoDto.builder()
                     .memberId(member.getMemberId())
@@ -172,19 +166,19 @@ public class AccountService {
 
 
 
-    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
 
-        String getAccessToken = jwtTokenProvider.extractAccessTokenFromCookie(httpServletRequest);
+        Optional<String> getAccessToken = jwtTokenProvider.extractAccessToken(httpServletRequest);
 
-        String username = jwtTokenProvider.getUsername(getAccessToken);
 
-        Cookie cookie= new Cookie("authorization", null);
-        cookie.setMaxAge(0);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        httpServletResponse.addCookie(cookie);
+        if(getAccessToken.isPresent()){
+            String username = jwtTokenProvider.getGoogleSub(getAccessToken.get());
+            Long expiration = jwtTokenProvider.getExpireTime(getAccessToken.get());
+            redisService.setBlackListToken(getAccessToken.get(), "BLACKLIST_ACCESSTOKEN_" + username, expiration);
+        }else{
+            throw  new InvalidAccessTokenException();
+        }
 
-        Long expiration = jwtTokenProvider.getExpireTime(getAccessToken);
-        redisService.setBlackListToken(getAccessToken, "BLACKLIST_ACCESSTOKEN_" + username, expiration);
+
     }
 }

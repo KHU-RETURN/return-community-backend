@@ -3,7 +3,6 @@ package com.khureturn.community.security;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +35,8 @@ public class JwtProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createAccessToken(String username) {
-        Claims claims = Jwts.claims().setSubject(username);
+    public String createAccessToken(String googleSub) {
+        Claims claims = Jwts.claims().setSubject(googleSub);
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
@@ -50,23 +49,10 @@ public class JwtProvider {
 
 
 
-//    public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException, ServletException {
-//        return Optional.ofNullable(request.getHeader(accessHeader)).filter(accessToken -> accessToken.startsWith(BEARER)).map(accessToken -> accessToken.replace(BEARER, ""));
-//    }
-
-
-    public String extractAccessTokenFromCookie(HttpServletRequest httpServletRequest) throws IOException{
-        Cookie[] cookies = httpServletRequest.getCookies();
-        if(cookies == null){
-            return null;
-        }
-        for(Cookie cookie : cookies){
-            if(cookie.getName().equals("authorization")){
-                return cookie.getValue();
-            }
-        }
-        return null;
+    public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException, ServletException {
+        return Optional.ofNullable(request.getHeader(accessHeader)).filter(accessToken -> accessToken.startsWith(BEARER)).map(accessToken -> accessToken.replace(BEARER, ""));
     }
+
 
     public Long getExpireTime(String token) {
         Date expirationDate =  Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getExpiration();
@@ -75,7 +61,7 @@ public class JwtProvider {
     }
 
 
-    public String getUsername(String token) {
+    public String getGoogleSub(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
