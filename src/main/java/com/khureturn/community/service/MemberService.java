@@ -68,12 +68,8 @@ public class MemberService {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         String accessToken = jwtProvider.createAccessToken(signUpRequestDto.getGoogleSub());
-        Cookie cookie = new Cookie("authorization", accessToken);
-        cookie.setMaxAge(604800);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        httpServletResponse.addCookie(cookie);
-        redisService.setDataWithExpiration(signUpRequestDto.getGoogleSub(), accessToken, 604800);
+        httpHeaders.add("Authorization", accessToken);
+
 
         MemberResponseDto.MemberBriefInfoDto memberBriefInfoDto = responseBriefInformation(member);
 
