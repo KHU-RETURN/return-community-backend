@@ -15,10 +15,13 @@ configurations {
 }
 
 repositories {
+
 	mavenCentral()
+	maven {url 'https://jitpack.io' }
 }
 
 dependencies {
+	implementation 'com.github.napstr:logback-discord-appender:1.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testImplementation 'junit:junit:4.13.1'
