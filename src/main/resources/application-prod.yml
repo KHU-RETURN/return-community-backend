@@ -40,4 +40,7 @@ google:
 jwt:
   secret : ${JWT_SECRET}
 
-
+logging:
+  discord:
+    webhook-url : ${DISCORD_WEBHOOK_URL}
+  config: classpath:logback.xml
