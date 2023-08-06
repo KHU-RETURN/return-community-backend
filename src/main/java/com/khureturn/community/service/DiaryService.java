@@ -7,6 +7,7 @@ import com.khureturn.community.dto.converter.DiaryConverter;
 import com.khureturn.community.dto.DiaryRequestDto;
 import com.khureturn.community.dto.DiaryResponseDto;
 import com.khureturn.community.dto.MemberResponseDto;
+import com.khureturn.community.dto.converter.JacksonUtil;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,10 @@ public class DiaryService{
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Diary create(List<MultipartFile> mediaList, DiaryRequestDto.CreateDiaryDto request, Principal principal) throws IOException {
+    public Diary create(List<MultipartFile> mediaList, String diaryCreateDto, Principal principal) throws IOException {
 
+        JacksonUtil jacksonUtil = new JacksonUtil();
+        DiaryRequestDto.CreateDiaryDto request = (DiaryRequestDto.CreateDiaryDto) jacksonUtil.strToObj(diaryCreateDto, DiaryRequestDto.CreateDiaryDto.class);
         Member member = memberRepository.findByName(principal.getName());
         Diary diary = DiaryConverter.toDiary(request, member);
         diaryRepository.save(diary);
@@ -48,7 +51,7 @@ public class DiaryService{
     }
 
     @Transactional
-    public Diary update(Long diaryId, DiaryRequestDto.UpdateDiaryDto request){
+    public Diary update(Long diaryId, DiaryRequestDto.UpdateDiaryDto request) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다."));
         diary.update(request.getTitle(), request.getContent(), request.getIsAnonymous());

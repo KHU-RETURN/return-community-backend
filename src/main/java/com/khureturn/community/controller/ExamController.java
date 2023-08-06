@@ -27,8 +27,8 @@ public class ExamController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ExamResponseDto.CreateExamDto> createExam(Principal principal, @RequestPart(value = "fileList", required= false) List<MultipartFile> fileList,
-                                                                    @RequestPart(value="data") ExamRequestDto.CreateExamDto data) throws IOException{
+    public ResponseEntity<ExamResponseDto.CreateExamDto> createExam(@RequestPart(value = "fileList", required= false) List<MultipartFile> fileList,
+                                                                    @RequestPart(value="data") String data, Principal principal) throws IOException{
         Exam exam = examService.create(fileList, data, principal);
         return ResponseEntity.ok(ExamResponseDto.CreateExamDto.builder().examId(exam.getId()).build());
     }
@@ -38,17 +38,5 @@ public class ExamController {
     public ResponseEntity<ExamResponseDto.UpdateExamDto> updateExam(@PathVariable(name = "examId") Long examId, @RequestBody ExamRequestDto.UpdateExamDto request){
         Exam exam = examService.update(examId, request);
         return ResponseEntity.ok(ExamResponseDto.UpdateExamDto.builder().examId(exam.getId()).build());
-    }
-
-    @DeleteMapping("/{examId}")
-    public ResponseEntity<Void> deleteExam(@PathVariable(name = "examId")Long examId){
-        examService.delete(examId);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{examId}")
-    public ResponseEntity<ExamResponseDto.ExamDto> getExam(@PathVariable(name = "examId")Long examId, Principal principal){
-        List<ExamFile> fileList = examFileService.findAllByExam(examId);
-        return ResponseEntity.ok(examService.getExam(examId, fileList, principal));
     }
 }
