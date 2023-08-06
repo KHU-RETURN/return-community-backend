@@ -1,8 +1,10 @@
 package com.khureturn.community.controller;
 
 import com.khureturn.community.domain.exam.Exam;
+import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.dto.ExamRequestDto;
 import com.khureturn.community.dto.ExamResponseDto;
+import com.khureturn.community.service.ExamFileService;
 import com.khureturn.community.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,11 +23,12 @@ import java.util.List;
 public class ExamController {
 
     private final ExamService examService;
+    private final ExamFileService examFileService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ExamResponseDto.CreateExamDto> createExam(Principal principal, @RequestPart(value = "fileList", required= false) List<MultipartFile> fileList,
-                                                                    @RequestPart(value="data") ExamRequestDto.CreateExamDto data) throws IOException{
+    public ResponseEntity<ExamResponseDto.CreateExamDto> createExam(@RequestPart(value = "fileList", required= false) List<MultipartFile> fileList,
+                                                                    @RequestPart(value="data") String data, Principal principal) throws IOException{
         Exam exam = examService.create(fileList, data, principal);
         return ResponseEntity.ok(ExamResponseDto.CreateExamDto.builder().examId(exam.getId()).build());
     }

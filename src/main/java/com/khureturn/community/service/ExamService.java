@@ -1,9 +1,13 @@
 package com.khureturn.community.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.exam.Exam;
 import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.dto.ExamRequestDto;
+import com.khureturn.community.dto.ExamResponseDto;
+import com.khureturn.community.dto.MemberResponseDto;
+import com.khureturn.community.dto.converter.JacksonUtil;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.ExamFileRepository;
 import com.khureturn.community.repository.ExamRepository;
@@ -15,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,8 +32,10 @@ public class ExamService {
     private final ExamFileRepository examFileRepository;
 
     @Transactional
-    public Exam create(List<MultipartFile> fileList, ExamRequestDto.CreateExamDto request, Principal principal) throws IOException {
+    public Exam create(List<MultipartFile> fileList, String examCreateDto, Principal principal) throws IOException {
         Member member = memberRepository.findByName(principal.getName());
+        JacksonUtil jacksonUtil = new JacksonUtil();
+        ExamRequestDto.CreateExamDto request = (ExamRequestDto.CreateExamDto) jacksonUtil.strToObj(examCreateDto, ExamRequestDto.CreateExamDto.class);
         Exam exam = Exam.builder()
                 .examTitle(request.getTitle())
                 .examContent(request.getContent())
@@ -57,7 +64,6 @@ public class ExamService {
         exam.update(request.getTitle(), request.getContent(), request.getIsAnonymous());
         return exam;
     }
-
 
 
 }
