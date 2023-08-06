@@ -1,8 +1,9 @@
-package com.khureturn.community.dto;
+package com.khureturn.community.dto.converter;
 
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryFile;
+import com.khureturn.community.dto.DiaryRequestDto;
 
 public class DiaryConverter {
 

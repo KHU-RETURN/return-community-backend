@@ -55,6 +55,9 @@ public class WebSecurityConfig{
                 .httpBasic().disable().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll() //PreFlight Request 요청 허용
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .requestMatchers("/swagger-resources/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint());

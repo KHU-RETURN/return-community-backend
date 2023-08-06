@@ -9,6 +9,7 @@ import com.khureturn.community.service.DiaryFileService;
 import com.khureturn.community.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class DiaryController {
     private final DiaryFileService diaryFileService;
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("")
+    @PostMapping(value ="", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<DiaryResponseDto.CreateDiaryDto> createDiary(Principal principal, @RequestPart(value = "mediaList", required= false) List<MultipartFile> mediaList,
                                                                        @RequestPart(value = "data")DiaryRequestDto.CreateDiaryDto data) throws IOException {
         Diary diary = diaryService.create(mediaList, data, principal);

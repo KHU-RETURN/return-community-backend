@@ -3,7 +3,6 @@ package com.khureturn.community.controller;
 import com.khureturn.community.domain.diary.DiaryComment;
 import com.khureturn.community.dto.DiaryCommentRequestDto;
 import com.khureturn.community.dto.DiaryCommentResponseDto;
-import com.khureturn.community.dto.DiaryConverter;
 import com.khureturn.community.service.DiaryCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

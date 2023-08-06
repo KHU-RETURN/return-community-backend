@@ -5,7 +5,9 @@ import com.khureturn.community.dto.ExamRequestDto;
 import com.khureturn.community.dto.ExamResponseDto;
 import com.khureturn.community.service.ExamService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,13 +22,15 @@ public class ExamController {
 
     private final ExamService examService;
 
-    @PostMapping("")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ExamResponseDto.CreateExamDto> createExam(Principal principal, @RequestPart(value = "fileList", required= false) List<MultipartFile> fileList,
                                                                     @RequestPart(value="data") ExamRequestDto.CreateExamDto data) throws IOException{
         Exam exam = examService.create(fileList, data, principal);
         return ResponseEntity.ok(ExamResponseDto.CreateExamDto.builder().examId(exam.getId()).build());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{examId}")
     public ResponseEntity<ExamResponseDto.UpdateExamDto> updateExam(@PathVariable(name = "examId") Long examId, @RequestBody ExamRequestDto.UpdateExamDto request){
         Exam exam = examService.update(examId, request);
