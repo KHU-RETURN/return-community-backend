@@ -14,9 +14,7 @@ public class ExamFile extends BaseEntity{
     @Column(name = "exam_file_id")
     private Long id;
 
-    private String examFileName;
     private String examFileUrl;
-    private String examFileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="exam_id")

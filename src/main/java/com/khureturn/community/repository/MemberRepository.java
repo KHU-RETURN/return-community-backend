@@ -27,6 +27,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findByName(String name);
 
-    Member findByDiaryComments(Long diaryCommentId);
-
 }

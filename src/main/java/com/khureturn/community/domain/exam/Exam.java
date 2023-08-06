@@ -18,6 +18,7 @@ public class Exam extends BaseEntity {
     private Long id;
     private String examTitle;
     private String examContent;
+    private Boolean isAnonymous;
 
     @Column(columnDefinition = "INT DEFAULT 0")
     private int examLikeCount;
@@ -40,4 +41,10 @@ public class Exam extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
     private Member member;
+
+    public void update(String examTitle, String examContent, Boolean isAnonymous){
+        this.examTitle=examTitle;
+        this.examContent=examContent;
+        this.isAnonymous=isAnonymous;
+    }
 }
