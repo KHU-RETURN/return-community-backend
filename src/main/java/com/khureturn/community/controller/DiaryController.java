@@ -7,6 +7,7 @@ import com.khureturn.community.dto.DiaryRequestDto;
 import com.khureturn.community.dto.DiaryResponseDto;
 import com.khureturn.community.service.DiaryFileService;
 import com.khureturn.community.service.DiaryService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -37,6 +38,7 @@ public class DiaryController {
         return ResponseEntity.ok(DiaryResponseDto.CreateDiaryDto.builder().postId(diary.getId()).build());
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/{postId}")
     public ResponseEntity<DiaryResponseDto.UpdateDiaryDto> updateDiary(@PathVariable(name = "postId")Long postId, @RequestBody DiaryRequestDto.UpdateDiaryDto data){
@@ -59,6 +61,7 @@ public class DiaryController {
     // 일기장 정렬
     @PreAuthorize("isAuthenticated()")
     @GetMapping("")
+    @Operation(description = "좋아요순의 정렬을 원할 경우 sort에 likecount 조회수순의 정렬을 원할 경우 sort에 viewcount")
     public ResponseEntity<List<DiaryResponseDto.DiarySortDto>> getDiaryList(@RequestParam(name = "page") int page,
                                                                             @RequestParam(name = "search", required = false) String search,
                                                                             @RequestParam(name = "sort", defaultValue = "createdAt") String sort, Principal principal){

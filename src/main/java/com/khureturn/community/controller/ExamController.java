@@ -39,4 +39,19 @@ public class ExamController {
         Exam exam = examService.update(examId, request);
         return ResponseEntity.ok(ExamResponseDto.UpdateExamDto.builder().examId(exam.getId()).build());
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{examId}")
+    public ResponseEntity<Void> deleteExam(@PathVariable(name = "examId")Long examId){
+        examService.delete(examId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{examId}")
+    public ResponseEntity<ExamResponseDto.ExamDto> getExam(@PathVariable(name = "examId")Long examId, Principal principal){
+        List<ExamFile> fileList = examFileService.findAllByExam(examId);
+        return ResponseEntity.ok(examService.getExam(examId, fileList, principal));
+    }
+
 }

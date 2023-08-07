@@ -30,7 +30,7 @@ public class ExamFileService {
         String savedFileName = uuid.toString() + "_" + file.getOriginalFilename();
         File saveFile = new File(fileDir, savedFileName);
         if(!saveFile.exists()){
-            saveFile.mkdir();
+            saveFile.mkdirs();
         }
         file.transferTo(saveFile);
         return saveFile.getPath();

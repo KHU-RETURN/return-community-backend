@@ -45,8 +45,10 @@ public class DiaryService{
         Member member = memberRepository.findByName(principal.getName());
         Diary diary = DiaryConverter.toDiary(request, member);
         diaryRepository.save(diary);
-        DiaryFile diaryFile = DiaryConverter.toDiaryFile(request, DiaryFileService.fileUpload(mediaList), diary);
-        diaryFileRepository.save(diaryFile);
+        for(MultipartFile media: mediaList){
+            DiaryFile diaryFile = DiaryFileService.fileUpload(media, diary);
+            diaryFileRepository.save(diaryFile);
+        }
         return diary;
     }
 

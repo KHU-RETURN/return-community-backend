@@ -26,6 +26,9 @@ public class Exam extends BaseEntity {
     @Column(columnDefinition = "INT DEFAULT 0")
     private int examScrapCount;
 
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private int examViewCount;
+
     @Builder.Default
     @OneToMany(mappedBy ="exam", cascade = CascadeType.ALL)
     private List<ExamFile> examFiles = new ArrayList<>();

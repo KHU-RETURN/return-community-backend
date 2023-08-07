@@ -8,3 +8,4 @@ public interface ExamRepository extends JpaRepository<Exam,Long> {
 
     Boolean existsByMember(Member member);
 }
+
