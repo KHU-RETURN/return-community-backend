@@ -4,6 +4,9 @@ import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.diary.DiaryFile;
 import com.khureturn.community.dto.DiaryRequestDto;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 public class DiaryConverter {
 
@@ -16,14 +19,5 @@ public class DiaryConverter {
                 .member(member)
                 .build();
     }
-    public static DiaryFile toDiaryFile(DiaryRequestDto.CreateDiaryDto request, String media, Diary diary){
-        return DiaryFile.builder()
-                .diaryThumb(request.getThumbnailIndex())
-                .diaryOriginalUrl(media)
-                .diary(diary)
-                .build();
-    }
-
-
 
 }

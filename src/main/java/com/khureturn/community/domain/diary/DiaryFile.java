@@ -16,7 +16,6 @@ public class DiaryFile extends BaseEntity {
     @Column(name = "diary_file_id")
     private Long id;
     private String diaryOriginalUrl;
-    private Integer diaryThumb;
     @Enumerated(EnumType.STRING)
     private MediaType mediaType;
 
