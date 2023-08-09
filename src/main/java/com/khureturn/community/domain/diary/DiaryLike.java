@@ -1,6 +1,7 @@
 package com.khureturn.community.domain.diary;
 
 import com.khureturn.community.domain.Member;
+import com.khureturn.community.domain.exam.Exam;
 import jakarta.persistence.*;
 import lombok.*;
 

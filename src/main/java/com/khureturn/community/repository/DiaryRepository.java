@@ -3,7 +3,6 @@ package com.khureturn.community.repository;
 import com.khureturn.community.domain.Member;
 import com.khureturn.community.domain.diary.Diary;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,8 +18,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     boolean existsByMember(Member member);
 
-    @Query("select d from Diary d where d.diaryContent like %?1%")
-    Page<Diary> findByDiaryContentContainingIgnoreCase(String search, Pageable pageable);
+    @Query("select d from Diary d where d.diaryContent like %?1% or d.diaryTitle like %?1%")
+    Page<Diary> findByDiaryContentContainingIgnoreCaseOrDiaryTitleContainingIgnoreCase(String search, Pageable pageable);
 
     Page<Diary> findAll(Pageable pageable);
 

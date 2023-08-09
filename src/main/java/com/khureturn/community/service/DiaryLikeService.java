@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.security.Principal;
 
 
 @Service
@@ -22,7 +23,9 @@ public class DiaryLikeService {
     private final DiaryLikeRepository diaryLikeRepository;
     private final MemberRepository memberRepository;
 
-    public void diaryLike(Long diaryId, Member member){
+    public void diaryLike(Long diaryId, Principal principal){
+        Member member = memberRepository.findByGoogleSub(principal.getName())
+                .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         if(diaryLikeRepository.existsDiaryLikeByMemberAndDiary(member, diary)){
@@ -39,7 +42,9 @@ public class DiaryLikeService {
 
     }
 
-    public void diaryUnlike(Long diaryId, Member member){
+    public void diaryUnlike(Long diaryId, Principal principal){
+        Member member = memberRepository.findByGoogleSub(principal.getName())
+                .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다"));
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         DiaryLike diaryLike = diaryLikeRepository.findByMemberAndDiary(member, diary)

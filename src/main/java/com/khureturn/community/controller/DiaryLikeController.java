@@ -19,23 +19,18 @@ import java.security.Principal;
 public class DiaryLikeController {
 
     private final DiaryLikeService diaryLikeService;
-    private final MemberService memberService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{postId}/like")
     public ResponseEntity<Void> createLike(Principal principal, @PathVariable(name = "postId")Long postId){
-        String name = principal.getName();
-        Member member = memberService.findByName(name);
-        diaryLikeService.diaryLike(postId, member);
+        diaryLikeService.diaryLike(postId, principal);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<Void> deleteLike(Principal principal, @PathVariable(name = "postId")Long postId){
-        String name = principal.getName();
-        Member member = memberService.findByName(name);
-        diaryLikeService.diaryUnlike(postId, member);
+        diaryLikeService.diaryUnlike(postId, principal);
         return ResponseEntity.ok().build();
     }
 

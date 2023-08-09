@@ -24,6 +24,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class DiaryService{
 
         JacksonUtil jacksonUtil = new JacksonUtil();
         DiaryRequestDto.CreateDiaryDto request = (DiaryRequestDto.CreateDiaryDto) jacksonUtil.strToObj(diaryCreateDto, DiaryRequestDto.CreateDiaryDto.class);
-        Member member = memberRepository.findByName(principal.getName());
+        Member member = memberRepository.findByGoogleSub(principal.getName()).orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Diary diary = DiaryConverter.toDiary(request, member);
         diaryRepository.save(diary);
         for(MultipartFile media: mediaList){
@@ -73,7 +74,7 @@ public class DiaryService{
 
     public DiaryResponseDto.DiaryDto findDiary(Diary diary, DiaryFile diaryFile, Principal principal){
         diary.increaseHit();
-        Member nowMember = memberRepository.findByName(principal.getName());
+        Member nowMember = memberRepository.findByGoogleSub(principal.getName()).orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Member diaryMember = diary.getMember();
         Boolean isLiked = diaryLikeRepository.existsDiaryLikeByMemberAndDiary(nowMember, diary);
         Boolean isBookmarked = diaryScrapRepository.existsDiaryScrapByMemberAndDiary(nowMember, diary);
@@ -103,7 +104,7 @@ public class DiaryService{
 
 
     public List<DiaryResponseDto.DiarySortDto> findDiarySort(List<Diary> diaryList, Principal principal){
-        Member nowMember = memberRepository.findByName(principal.getName());
+        Member nowMember = memberRepository.findByGoogleSub(principal.getName()).orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         List<DiaryResponseDto.DiarySortDto> sortList = new ArrayList<>();
         for(Diary d: diaryList){
             Member diarymember = d.getMember();
@@ -137,28 +138,27 @@ public class DiaryService{
 
     // 한 페이지에 5개씩
     public List<Diary> getPage(int page, String sort, String search){
-        if(sort == "likecount"){
+        if(Objects.equals(sort, "likecount")){
             Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "diaryLikeCount"));
-            Page<Diary> likesort = diaryRepository.findByDiaryContentContainingIgnoreCase(search, pageable);
-
+            Page<Diary> likesort = diaryRepository.findByDiaryContentContainingIgnoreCaseOrDiaryTitleContainingIgnoreCase(search, pageable);
             return likesort.getContent();
-        } else if (sort == "viewcount") {
+        } else if (Objects.equals(sort, "viewcount")) {
             Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "diaryViewCount"));
-            Page<Diary> viewsort = diaryRepository.findByDiaryContentContainingIgnoreCase(search, pageable);
+            Page<Diary> viewsort = diaryRepository.findByDiaryContentContainingIgnoreCaseOrDiaryTitleContainingIgnoreCase(search, pageable);
             return viewsort.getContent();
         } else{
             Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
-            Page<Diary> datesort = diaryRepository.findByDiaryContentContainingIgnoreCase(search, pageable);
+            Page<Diary> datesort = diaryRepository.findByDiaryContentContainingIgnoreCaseOrDiaryTitleContainingIgnoreCase(search, pageable);
             return datesort.getContent();
         }
     }
 
     public List<Diary> findAll(int page, String sort){
-        if(sort == "likecount"){
+        if(Objects.equals(sort, "likecount")){
             Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "diaryLikeCount"));
             Page<Diary> likesort = diaryRepository.findAll(pageable);
             return likesort.getContent();
-        } else if (sort == "viewcount") {
+        } else if (Objects.equals(sort, "viewcount")) {
             Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "diaryViewCount"));
             Page<Diary> viewsort = diaryRepository.findAll(pageable);
             return viewsort.getContent();
