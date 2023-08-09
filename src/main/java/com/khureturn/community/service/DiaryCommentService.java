@@ -26,6 +26,9 @@ public class DiaryCommentService {
     private final MemberRepository memberRepository;
 
     public DiaryComment create(Long diaryId, DiaryCommentRequestDto.CreateCommentDto request, Principal principal){
+
+        Member member = memberRepository.findByGoogleSub(principal.getName())
+                .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         String diaryHashtag = String.join(",", request.getHashtagList());
@@ -34,7 +37,7 @@ public class DiaryCommentService {
                 .diaryCommentContent(request.getContent())
                 .diaryHashtag(diaryHashtag)
                 .diary(diary)
-                .member((Member) principal)
+                .member(member)
                 .build();
 
         return diaryCommentRepository.save(diaryComment);
@@ -63,7 +66,8 @@ public class DiaryCommentService {
     public DiaryComment createReComment(Principal principal, Long diaryId, Long commentId, DiaryCommentRequestDto.CreateRecommentDto request){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
-        Member member = memberRepository.findByName(principal.getName());
+        Member member = memberRepository.findByGoogleSub(principal.getName())
+                .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         DiaryComment diaryComment = diaryCommentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
         DiaryComment diaryRecomment = DiaryComment.builder()

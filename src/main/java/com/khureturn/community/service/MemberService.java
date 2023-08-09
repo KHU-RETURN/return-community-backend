@@ -8,6 +8,7 @@ import com.khureturn.community.dto.MemberResponseDto;
 import com.khureturn.community.exception.ErrCode;
 import com.khureturn.community.exception.Member.FailedMemberInfo;
 import com.khureturn.community.exception.Member.InvalidMemberInfoException;
+import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.exception.ServerInternalException;
 import com.khureturn.community.exception.authentication.InvalidAccessTokenException;
 import com.khureturn.community.repository.MemberRepository;
@@ -207,10 +208,6 @@ public class MemberService {
             throw new InvalidMemberInfoException(ErrCode.DUPLICATED_NICKNAME);
         }
 
-    }
-
-    public Member findByName(String name) {
-        return memberRepository.findByName(name);
     }
 
     public MemberResponseDto.FullUserInformationResponse getFullUserInformation(String username) {

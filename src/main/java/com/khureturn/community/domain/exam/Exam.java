@@ -50,4 +50,10 @@ public class Exam extends BaseEntity {
         this.examContent=examContent;
         this.isAnonymous=isAnonymous;
     }
+
+    public void increaseHit(){this.examViewCount++;}
+    public void increaseLike(){ this.examLikeCount++;}
+    public void increaseScrap(){this.examScrapCount++;}
+    public void decreaseLike(){ this.examLikeCount--;}
+    public void decreaseScrap(){this.examScrapCount--;}
 }

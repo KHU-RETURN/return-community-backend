@@ -18,23 +18,19 @@ import java.security.Principal;
 public class DiaryScrapController {
 
     private final DiaryScrapService diaryScrapService;
-    private final MemberService memberService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{postId}/bookmark")
     public ResponseEntity<Void> createLike(Principal principal, @PathVariable(name = "postId")Long postId){
-        String name = principal.getName();
-        Member member = memberService.findByName(name);
-        diaryScrapService.diaryScrap(postId, member);
+
+        diaryScrapService.diaryScrap(postId, principal);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}/bookmark")
     public ResponseEntity<Void> deleteLike(Principal principal, @PathVariable(name = "postId")Long postId){
-        String name = principal.getName();
-        Member member = memberService.findByName(name);
-        diaryScrapService.diaryUnScrap(postId, member);
+        diaryScrapService.diaryUnScrap(postId, principal);
         return ResponseEntity.ok().build();
     }
 

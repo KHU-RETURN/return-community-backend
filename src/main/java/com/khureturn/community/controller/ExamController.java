@@ -1,12 +1,15 @@
 package com.khureturn.community.controller;
 
+import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.exam.Exam;
 import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.dto.ExamRequestDto;
 import com.khureturn.community.dto.ExamResponseDto;
 import com.khureturn.community.service.ExamFileService;
 import com.khureturn.community.service.ExamService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +20,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/exam")
@@ -47,11 +51,30 @@ public class ExamController {
         return ResponseEntity.ok().build();
     }
 
+    // 시험 정보 상세 조회
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{examId}")
     public ResponseEntity<ExamResponseDto.ExamDto> getExam(@PathVariable(name = "examId")Long examId, Principal principal){
         List<ExamFile> fileList = examFileService.findAllByExam(examId);
         return ResponseEntity.ok(examService.getExam(examId, fileList, principal));
+    }
+
+    // 시험 정보 정렬
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("")
+    @Operation(description = "좋아요순의 정렬을 원할 경우 sort에 likecount 조회수순의 정렬을 원할 경우 sort에 viewcount")
+    public ResponseEntity<List<ExamResponseDto.ExamSortDto>> getExamList(@RequestParam(name = "page")int page,
+                                                                         @RequestParam(name = "search", required = false) String search,
+                                                                         @RequestParam(name = "sort", defaultValue = "createdAt")String sort,
+                                                                         Principal principal){
+
+        if(search != null){
+            List<Exam> examList = examService.getPage(page-1, sort, search);
+            return ResponseEntity.ok(examService.findExamSort(examList, principal));
+        } else{
+            List<Exam> examList = examService.findAll(page-1, sort);
+            return ResponseEntity.ok(examService.findExamSort(examList, principal));
+        }
     }
 
 }

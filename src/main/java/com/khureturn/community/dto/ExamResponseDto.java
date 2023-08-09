@@ -48,4 +48,23 @@ public class ExamResponseDto {
         private MemberResponseDto.MemberSortDto member;
 
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ExamSortDto{
+        private Long examId;
+        private String title;
+        private int likeCount;
+        private int commentCount;
+        private int viewCount;
+        private MemberResponseDto.MemberSortDto member;
+        private LocalDateTime createdDate;
+        private Boolean isAnonymous;
+        private Boolean isMyPost;
+        private Boolean isLiked;
+        private Boolean isBookmarked;
+    }
 }

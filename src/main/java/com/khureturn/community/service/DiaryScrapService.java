@@ -8,8 +8,11 @@ import com.khureturn.community.exception.DuplicateInsertionException;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.DiaryRepository;
 import com.khureturn.community.repository.DiaryScrapRepository;
+import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +20,11 @@ public class DiaryScrapService {
 
     private final DiaryRepository diaryRepository;
     private final DiaryScrapRepository diaryScrapRepository;
+    private final MemberRepository memberRepository;
 
-    public void diaryScrap(Long diaryId, Member member){
+    public void diaryScrap(Long diaryId, Principal principal){
+        Member member = memberRepository.findByGoogleSub(principal.getName())
+                .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         if(diaryScrapRepository.existsDiaryScrapByMemberAndDiary(member, diary)){
@@ -35,7 +41,9 @@ public class DiaryScrapService {
 
     }
 
-    public void diaryUnScrap(Long diaryId, Member member){
+    public void diaryUnScrap(Long diaryId, Principal principal){
+        Member member = memberRepository.findByGoogleSub(principal.getName())
+                .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         DiaryScrap diaryScrap = diaryScrapRepository.findByMemberAndDiary(member, diary)

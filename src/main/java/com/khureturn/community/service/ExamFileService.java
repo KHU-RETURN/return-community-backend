@@ -5,7 +5,6 @@ import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.ExamFileRepository;
 import com.khureturn.community.repository.ExamRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
