@@ -32,12 +32,12 @@ public class DiaryController {
 
     private final DiaryFileService diaryFileService;
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @PostMapping(value ="", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<DiaryResponseDto.CreateDiaryDto> createDiary(Principal principal, @RequestPart(value = "mediaList", required= false) List<MultipartFile> mediaList,
+    public ResponseEntity<DiaryResponseDto.CreateDiaryDto> createDiary(@RequestPart(value = "mediaList", required= false) List<MultipartFile> mediaList,
                                                                        @RequestPart(value = "data")String data) throws IOException {
 
-        Diary diary = diaryService.create(mediaList, data, principal);
+        Diary diary = diaryService.create(mediaList, data);
         return ResponseEntity.ok(DiaryResponseDto.CreateDiaryDto.builder().postId(diary.getId()).build());
     }
 

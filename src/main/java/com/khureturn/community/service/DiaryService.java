@@ -39,12 +39,12 @@ public class DiaryService{
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Diary create(List<MultipartFile> mediaList, String diaryCreateDto, Principal principal) throws IOException {
+    public Diary create(List<MultipartFile> mediaList, String diaryCreateDto) throws IOException {
 
         JacksonUtil jacksonUtil = new JacksonUtil();
         DiaryRequestDto.CreateDiaryDto request = (DiaryRequestDto.CreateDiaryDto) jacksonUtil.strToObj(diaryCreateDto, DiaryRequestDto.CreateDiaryDto.class);
-        Member member = memberRepository.findByGoogleSub(principal.getName()).orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
-        Diary diary = DiaryConverter.toDiary(request, member);
+        //Member member = memberRepository.findByGoogleSub(principal.getName()).orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
+        Diary diary = DiaryConverter.toDiary(request);
         diaryRepository.save(diary);
         for(MultipartFile media: mediaList){
             DiaryFile diaryFile = DiaryFileService.fileUpload(media, diary);

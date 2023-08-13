@@ -1,6 +1,5 @@
 package com.khureturn.community.controller;
 
-import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.exam.Exam;
 import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.dto.ExamRequestDto;
@@ -76,5 +75,7 @@ public class ExamController {
             return ResponseEntity.ok(examService.findExamSort(examList, principal));
         }
     }
+
+
 
 }
