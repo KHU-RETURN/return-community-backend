@@ -6,13 +6,13 @@ import com.khureturn.community.dto.DiaryRequestDto;
 
 public class DiaryConverter {
 
-    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request){
+    public static Diary toDiary(DiaryRequestDto.CreateDiaryDto request, Member member){
         return Diary.builder()
                 .diaryTitle(request.getTitle())
                 .diaryContent(request.getContent())
                 .isAnonymous(request.getIsAnonymous())
                 .thumbnailIndex(request.getThumbnailIndex())
-                //.member(member)
+                .member(member)
                 .build();
     }
 

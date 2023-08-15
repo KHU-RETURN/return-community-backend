@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,12 +30,12 @@ public class DiaryController {
 
     private final DiaryFileService diaryFileService;
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value ="", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<DiaryResponseDto.CreateDiaryDto> createDiary(@RequestPart(value = "mediaList", required= false) List<MultipartFile> mediaList,
-                                                                       @RequestPart(value = "data")String data) throws IOException {
+                                                                       @RequestPart(value = "data")String data, Principal principal) throws IOException {
 
-        Diary diary = diaryService.create(mediaList, data);
+        Diary diary = diaryService.create(mediaList, data, principal);
         return ResponseEntity.ok(DiaryResponseDto.CreateDiaryDto.builder().postId(diary.getId()).build());
     }
 
