@@ -7,14 +7,11 @@ import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.DiaryFileRepository;
 import com.khureturn.community.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,9 +26,10 @@ public class DiaryFileService {
         String rootPath = System.getProperty("user.dir") + "/src/main/webapp/WEB-INF";
         String fileDir = rootPath + "/static/thumbnailDiaryMedia";
         MediaType mediaType = null;
-        if(media.getContentType().startsWith("image")){
+        String extension = media.getOriginalFilename().substring(media.getOriginalFilename().lastIndexOf("."));
+        if(extension.equals("png") || extension.equals("jpeg") || extension.equals("gif") || extension.equals("jpg") || extension.equals("PNG") || extension.equals("JPEG") || extension.equals("GIF") || extension.equals("JPG")){
             mediaType = MediaType.IMAGE;
-        }else{
+        } else{
             mediaType = MediaType.VIDEO;
         }
         UUID uuid = UUID.randomUUID();

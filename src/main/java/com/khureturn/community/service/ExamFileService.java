@@ -5,6 +5,8 @@ import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.ExamFileRepository;
 import com.khureturn.community.repository.ExamRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,4 +43,5 @@ public class ExamFileService {
                 .orElseThrow(() -> new NotFoundException("족보를 찾을 수 없습니다."));
         return examFileRepository.findAllByExam(exam);
     }
+
 }

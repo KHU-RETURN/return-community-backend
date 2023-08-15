@@ -12,8 +12,7 @@ import lombok.*;
 @Getter
 public class NoticeFile extends BaseEntity {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_file_id")
     private Long id;
 

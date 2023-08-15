@@ -80,6 +80,7 @@ public class DiaryService{
         Boolean isBookmarked = diaryScrapRepository.existsDiaryScrapByMemberAndDiary(nowMember, diary);
         Boolean isMyPost = diaryRepository.existsByMember(nowMember);
         DiaryResponseDto.DiaryDto result = DiaryResponseDto.DiaryDto.builder()
+                .diaryId(diary.getId())
                 .isLiked(isLiked)
                 .isBookmarked(isBookmarked)
                 .member(MemberResponseDto.MemberDto.builder().memberId(diaryMember.getMemberId()).profileImgURL(diaryMember.getProfileImg()).name(diaryMember.getName()).phoneNumber(diaryMember.getPhoneNumber()).build())

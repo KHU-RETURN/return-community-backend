@@ -1,6 +1,5 @@
 package com.khureturn.community.controller;
 
-import com.khureturn.community.domain.diary.Diary;
 import com.khureturn.community.domain.exam.Exam;
 import com.khureturn.community.domain.exam.ExamFile;
 import com.khureturn.community.dto.ExamRequestDto;
@@ -8,6 +7,8 @@ import com.khureturn.community.dto.ExamResponseDto;
 import com.khureturn.community.service.ExamFileService;
 import com.khureturn.community.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -76,5 +77,7 @@ public class ExamController {
             return ResponseEntity.ok(examService.findExamSort(examList, principal));
         }
     }
+
+
 
 }

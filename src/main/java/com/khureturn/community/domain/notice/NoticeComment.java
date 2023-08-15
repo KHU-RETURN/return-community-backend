@@ -13,7 +13,7 @@ import lombok.*;
 @Getter
 public class NoticeComment extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_comment_id")
     private Long id;
 

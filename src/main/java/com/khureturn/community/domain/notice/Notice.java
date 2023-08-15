@@ -13,7 +13,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class  Notice extends BaseEntity {
-    @Id @GeneratedValue
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_id")
     private Long id;
     @Column(nullable = false)
