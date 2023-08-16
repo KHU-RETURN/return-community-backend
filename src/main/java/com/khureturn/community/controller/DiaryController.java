@@ -39,7 +39,6 @@ public class DiaryController {
         return ResponseEntity.ok(DiaryResponseDto.CreateDiaryDto.builder().postId(diary.getId()).build());
     }
 
-
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/{postId}")
     public ResponseEntity<DiaryResponseDto.UpdateDiaryDto> updateDiary(@PathVariable(name = "postId")Long postId, @RequestBody DiaryRequestDto.UpdateDiaryDto data){
@@ -56,8 +55,6 @@ public class DiaryController {
         DiaryFile diaryFile = diaryFileService.findByDiary(postId);
         return ResponseEntity.ok(diaryService.findDiary(diary, diaryFile, principal));
     }
-
-
 
     // 일기장 정렬
     @PreAuthorize("isAuthenticated()")
