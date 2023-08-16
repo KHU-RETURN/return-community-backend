@@ -51,7 +51,6 @@ public class DiaryCommentService {
                 .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
         DiaryComment diaryComment = diaryCommentRepository.findByIdAndDiary(diaryCommentId, diary);
         diaryComment.update(request.getContent());
-        diaryCommentRepository.save(diaryComment);
         return diaryComment;
     }
 
@@ -108,7 +107,7 @@ public class DiaryCommentService {
                     .commentId(c.getId())
                     .content(c.getDiaryCommentContent())
                     .recommentCount(reCommentCount)
-                    .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
+                    .user(MemberResponseDto.MemberSortDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).nickname(member.getNickname()).build())
                     .createdDate(c.getCreatedAt())
                     .build();
             list.add(comment);
