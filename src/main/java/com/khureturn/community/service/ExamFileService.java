@@ -9,12 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
@@ -26,18 +26,24 @@ public class ExamFileService {
     private final ExamRepository examRepository;
     private final ExamFileRepository examFileRepository;
 
-    public static String fileUpload(MultipartFile file) throws IOException {
+    public static ExamFile fileUpload(MultipartFile file, Exam exam) throws IOException {
 
         String rootPath = System.getProperty("user.dir") + "/src/main/webapp/WEB-INF";
-        String fileDir = rootPath + "/static/examFiles";
+        String fileDir = "/static/examFiles";
+        String filePath = rootPath + fileDir;
         UUID uuid = UUID.randomUUID();
         String savedFileName = uuid.toString() + "_" + file.getOriginalFilename();
-        File saveFile = new File(fileDir, savedFileName);
+        File saveFile = new File(filePath, savedFileName);
         if(!saveFile.exists()){
             saveFile.mkdirs();
         }
         file.transferTo(saveFile);
-        return saveFile.getPath();
+        ExamFile examFile = ExamFile.builder()
+                .examFileUrl(fileDir + "/" + savedFileName)
+                .examFileName(savedFileName)
+                .exam(exam)
+                .build();
+        return examFile;
 
     }
 
@@ -46,4 +52,5 @@ public class ExamFileService {
                 .orElseThrow(() -> new NotFoundException("족보를 찾을 수 없습니다."));
         return examFileRepository.findAllByExam(exam);
     }
+
 }

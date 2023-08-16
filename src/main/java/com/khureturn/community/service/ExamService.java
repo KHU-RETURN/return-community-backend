@@ -52,12 +52,8 @@ public class ExamService {
 
         if(fileList != null){
             for(MultipartFile file: fileList){
-                ExamFile examFile = ExamFile.builder()
-                        .examFileUrl(ExamFileService.fileUpload(file))
-                        .exam(exam)
-                        .build();
+                ExamFile examFile = ExamFileService.fileUpload(file, exam);
                 examFileRepository.save(examFile);
-
             }
         }
         return exam;
@@ -82,6 +78,7 @@ public class ExamService {
 
         Exam exam = examRepository.findById(examId)
                 .orElseThrow(() -> new NotFoundException("시험 정보를 찾을 수 없습니다."));
+        exam.increaseHit();
         Member nowMember = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Member examMember = exam.getMember();
@@ -166,7 +163,7 @@ public class ExamService {
                     .title(exam.getExamTitle())
                     .likeCount(exam.getExamLikeCount())
                     .viewCount(exam.getExamViewCount())
-                    .member(MemberResponseDto.MemberSortDto.builder().memberId(examMember.getMemberId()).profileImgURL(examMember.getProfileImg()).name(examMember.getName()).build())
+                    .member(MemberResponseDto.MemberSortDto.builder().memberId(examMember.getMemberId()).profileImgURL(examMember.getProfileImg()).name(examMember.getName()).nickname(examMember.getNickname()).build())
                     .createdDate(exam.getCreatedAt())
                     .isAnonymous(exam.getIsAnonymous())
                     .isMyPost(isMyPost)
