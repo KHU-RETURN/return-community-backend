@@ -25,6 +25,7 @@ public class DiaryScrapService {
     public void diaryScrap(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
+
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         if(diaryScrapRepository.existsDiaryScrapByMemberAndDiary(member, diary)){
@@ -44,6 +45,7 @@ public class DiaryScrapService {
     public void diaryUnScrap(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
+
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         DiaryScrap diaryScrap = diaryScrapRepository.findByMemberAndDiary(member, diary)

@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -24,9 +25,10 @@ public class DiaryFileService {
     public static DiaryFile fileUpload(MultipartFile media, Diary diary) throws IOException {
 
         String rootPath = System.getProperty("user.dir") + "/src/main/webapp/WEB-INF";
-        String fileDir = rootPath + "/static/thumbnailDiaryMedia";
-        MediaType mediaType = null;
-        String extension = media.getOriginalFilename().substring(media.getOriginalFilename().lastIndexOf("."));
+        String fileDir = "/static/thumbnailDiaryMedia";
+        String filePath = rootPath + fileDir;
+        MediaType mediaType;
+        String extension = Objects.requireNonNull(media.getOriginalFilename()).substring(media.getOriginalFilename().lastIndexOf(".")+1);
         if(extension.equals("png") || extension.equals("jpeg") || extension.equals("gif") || extension.equals("jpg") || extension.equals("PNG") || extension.equals("JPEG") || extension.equals("GIF") || extension.equals("JPG")){
             mediaType = MediaType.IMAGE;
         } else{
@@ -34,14 +36,14 @@ public class DiaryFileService {
         }
         UUID uuid = UUID.randomUUID();
         String savedMediaName = uuid.toString() +"_" +media.getOriginalFilename();
-        File saveMedia = new File(fileDir, savedMediaName);
+        File saveMedia = new File(filePath, savedMediaName);
         if(!saveMedia.exists()){
             saveMedia.mkdirs();
         }
         media.transferTo(saveMedia);
         DiaryFile diaryFile = DiaryFile.builder()
                 .mediaType(mediaType)
-                .diaryOriginalUrl(saveMedia.getPath())
+                .diaryOriginalUrl(fileDir + "/" + savedMediaName)
                 .diary(diary)
                 .build();
 

@@ -26,6 +26,7 @@ public class DiaryLikeService {
     public void diaryLike(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
+
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         if(diaryLikeRepository.existsDiaryLikeByMemberAndDiary(member, diary)){
@@ -45,6 +46,7 @@ public class DiaryLikeService {
     public void diaryUnlike(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다"));
+
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
         DiaryLike diaryLike = diaryLikeRepository.findByMemberAndDiary(member, diary)
