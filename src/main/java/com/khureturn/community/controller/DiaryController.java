@@ -76,7 +76,7 @@ public class DiaryController {
     }
 
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deleteDiary(@PathVariable(name = "postId")Long postId){
         diaryService.delete(postId);
