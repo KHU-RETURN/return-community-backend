@@ -60,7 +60,8 @@ public class DiaryCommentService {
     public void delete(Long diaryId, Long diaryCommentId){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
-        diaryCommentRepository.deleteByDiaryAndId(diary, diaryCommentId);
+        DiaryComment diaryComment = diaryCommentRepository.findByIdAndDiary(diaryCommentId, diary);
+        diaryCommentRepository.delete(diaryComment);
     }
 
     public DiaryComment createReComment(Principal principal, Long diaryId, Long commentId, DiaryCommentRequestDto.CreateRecommentDto request){
@@ -120,7 +121,8 @@ public class DiaryCommentService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다."));
         DiaryComment parent = diaryCommentRepository.findByIdAndDiary(commentId, diary);
-        diaryCommentRepository.deleteByDiaryAndParentAndId(diary, parent, recommentId);
+        DiaryComment recomment = diaryCommentRepository.findByIdAndDiaryAndParent(recommentId, diary, parent);
+        diaryCommentRepository.delete(recomment);
 
     }
 
