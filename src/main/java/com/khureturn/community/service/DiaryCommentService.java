@@ -12,6 +12,7 @@ import com.khureturn.community.repository.DiaryRepository;
 import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class DiaryCommentService {
     private final DiaryCommentRepository diaryCommentRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public DiaryComment create(Long diaryId, DiaryCommentRequestDto.CreateCommentDto request, Principal principal){
 
         Member member = memberRepository.findByGoogleSub(principal.getName())
@@ -43,11 +45,13 @@ public class DiaryCommentService {
         return diaryCommentRepository.save(diaryComment);
     }
 
+    @Transactional
     public DiaryComment update(Long diaryId, Long diaryCommentId, DiaryCommentRequestDto.UpdateCommentDto request){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
         DiaryComment diaryComment = diaryCommentRepository.findByIdAndDiary(diaryCommentId, diary);
         diaryComment.update(request.getContent());
+        diaryCommentRepository.save(diaryComment);
         return diaryComment;
     }
 
@@ -57,6 +61,7 @@ public class DiaryCommentService {
         return diaryCommentRepository.findAllByDiary(diary);
     }
 
+    @Transactional
     public void delete(Long diaryId, Long diaryCommentId){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다"));
@@ -64,6 +69,7 @@ public class DiaryCommentService {
         diaryCommentRepository.delete(diaryComment);
     }
 
+    @Transactional
     public DiaryComment createReComment(Principal principal, Long diaryId, Long commentId, DiaryCommentRequestDto.CreateRecommentDto request){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
@@ -82,6 +88,7 @@ public class DiaryCommentService {
 
     }
 
+    @Transactional
     public DiaryComment updateReComment(Long diaryId, Long commentId, Long recommentId, DiaryCommentRequestDto.UpdateCommentDto request){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
@@ -117,6 +124,7 @@ public class DiaryCommentService {
         return reCommentList;
     }
 
+    @Transactional
     public void deleteRecomment(Long diaryId, Long commentId, Long recommentId){
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new NotFoundException("Diary를 찾을 수 없습니다."));

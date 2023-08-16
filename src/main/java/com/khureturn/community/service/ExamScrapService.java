@@ -35,7 +35,7 @@ public class ExamScrapService {
                 .build();
 
         examScrapRepository.save(examScrap);
-        exam.increaseLike();
+        exam.increaseScrap();
 
     }
 
@@ -48,7 +48,7 @@ public class ExamScrapService {
                 .orElseThrow(() -> new NotFoundException("스크랩을 찾을 수 없습니다"));
 
         examScrapRepository.delete(examScrap);
-        exam.decreaseLike();
+        exam.decreaseScrap();
 
     }
 }
