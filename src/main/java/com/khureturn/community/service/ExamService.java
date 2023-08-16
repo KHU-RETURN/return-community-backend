@@ -9,6 +9,8 @@ import com.khureturn.community.dto.MemberResponseDto;
 import com.khureturn.community.dto.converter.JacksonUtil;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

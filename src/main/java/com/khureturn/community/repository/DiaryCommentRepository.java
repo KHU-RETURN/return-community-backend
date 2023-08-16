@@ -12,15 +12,13 @@ public interface DiaryCommentRepository extends JpaRepository<DiaryComment, Long
 
     List<DiaryComment> findAllByDiary(Diary diary);
 
-    void deleteByDiaryAndId(Diary diary, Long diaryCommentId);
+    void delete(DiaryComment diaryComment);
 
     DiaryComment findByIdAndDiary(Long diaryCommentId, Diary diary);
 
     DiaryComment findByIdAndDiaryAndParent(Long recommentId, Diary diary, DiaryComment parent);
 
     int countAllByParent(DiaryComment parent);
-
-    void deleteByDiaryAndParentAndId(Diary diary, DiaryComment parent, Long recommendId);
 
     List<DiaryComment> findAllByDiaryAndParent(Diary diary, DiaryComment parent);
 

@@ -41,7 +41,7 @@ public class DiaryCommentController {
         return ResponseEntity.ok(diaryCommentService.getCommentList(commentList));
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @DeleteMapping("/diary/{postId}/comment/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable(name = "postId")Long postId, @PathVariable(name = "commentId")Long commentId){
         diaryCommentService.delete(postId,commentId);
@@ -78,7 +78,7 @@ public class DiaryCommentController {
         return ResponseEntity.ok(DiaryCommentResponseDto.UpdateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @DeleteMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
     public ResponseEntity<Void> deleteRecomment(@PathVariable(name = "postId")Long postId,
                                                 @PathVariable(name = "commentId")Long commentId,
