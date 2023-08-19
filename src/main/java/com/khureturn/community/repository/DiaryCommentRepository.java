@@ -20,6 +20,8 @@ public interface DiaryCommentRepository extends JpaRepository<DiaryComment, Long
 
     int countAllByParent(DiaryComment parent);
 
+
+
     List<DiaryComment> findAllByDiaryAndParent(Diary diary, DiaryComment parent);
 
 
