@@ -22,6 +22,9 @@ public class DiaryComment extends BaseEntity {
 
     private String diaryHashtag;
 
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private int recommentCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private DiaryComment parent;

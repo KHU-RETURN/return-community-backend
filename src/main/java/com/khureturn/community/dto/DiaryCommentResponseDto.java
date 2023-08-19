@@ -16,9 +16,9 @@ public class DiaryCommentResponseDto {
         private Long commentId;
         private String content;
         private int recommentCount;
+        private List<DiaryCommentResponseDto.ReCommentDto> recomments;
         private MemberResponseDto.MemberDto user;
         private LocalDateTime createdDate;
-
 
     }
 
@@ -37,6 +37,18 @@ public class DiaryCommentResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UpdateDiaryCommentDto{
         private Long commentId;
+
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ReCommentDto{
+        private Long recommentId;
+        private String content;
+        private MemberResponseDto.MemberDto user;
+        private LocalDateTime createdDate;
 
     }
 

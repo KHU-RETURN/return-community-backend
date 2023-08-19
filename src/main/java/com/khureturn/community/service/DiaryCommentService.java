@@ -99,15 +99,30 @@ public class DiaryCommentService {
 
     }
 
-    public List<DiaryCommentResponseDto.CommentDto> getCommentList(List<DiaryComment> diaryCommentList){
+    public List<DiaryCommentResponseDto.CommentDto> getCommentList(Long postId){
         List<DiaryCommentResponseDto.CommentDto> list = new ArrayList<>();
+        Diary diary = diaryRepository.findById(postId)
+                .orElseThrow(()-> new NotFoundException("일기장이 존재하지 않습니다."));
+        List<DiaryComment> diaryCommentList = diaryCommentRepository.findAllByDiaryAndParent(diary, null);
         for(DiaryComment c: diaryCommentList){
             Member member = c.getMember();
-            int reCommentCount = diaryCommentRepository.countAllByParent(c.getParent());
+            int reCommentCount = diaryCommentRepository.countAllByParent(c);
+            List<DiaryComment> recommentList = diaryCommentRepository.findAllByDiaryAndParent(diary, c);
+            List<DiaryCommentResponseDto.ReCommentDto> recommentResultList = new ArrayList<>();
+            for(DiaryComment re: recommentList){
+                DiaryCommentResponseDto.ReCommentDto result = DiaryCommentResponseDto.ReCommentDto.builder()
+                        .recommentId(re.getId())
+                        .content(re.getDiaryCommentContent())
+                        .user(MemberResponseDto.MemberDto.builder().memberId(re.getMember().getMemberId()).profileImgURL(re.getMember().getProfileImg()).name(re.getMember().getName()).nickname(re.getMember().getNickname()).build())
+                        .createdDate(re.getCreatedAt())
+                        .build();
+                recommentResultList.add(result);
+            }
             DiaryCommentResponseDto.CommentDto comment = DiaryCommentResponseDto.CommentDto.builder()
                     .commentId(c.getId())
                     .content(c.getDiaryCommentContent())
                     .recommentCount(reCommentCount)
+                    .recomments(recommentResultList)
                     .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
                     .createdDate(c.getCreatedAt())
                     .build();

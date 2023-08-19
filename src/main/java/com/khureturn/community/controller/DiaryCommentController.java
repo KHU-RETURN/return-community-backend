@@ -34,11 +34,11 @@ public class DiaryCommentController {
         return ResponseEntity.ok(DiaryCommentResponseDto.UpdateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
 
+    // 댓글 조회시 대댓글도 조회
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/diary/{postId}/comment")
     public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getComment(@PathVariable(name = "postId")Long postId){
-        List<DiaryComment> commentList = diaryCommentService.findAllByDiary(postId);
-        return ResponseEntity.ok(diaryCommentService.getCommentList(commentList));
+        return ResponseEntity.ok(diaryCommentService.getCommentList(postId));
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -59,14 +59,6 @@ public class DiaryCommentController {
         return ResponseEntity.ok(DiaryCommentResponseDto.CreateDiaryCommentDto.builder().commentId(diaryComment.getId()).build());
     }
 
-    // 대댓글 조회
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/diary/{postId}/comment/{commentId}/recomment")
-    public ResponseEntity<List<DiaryCommentResponseDto.CommentDto>> getRecomment(@PathVariable(name = "postId")Long postId,
-                                                                                 @PathVariable(name = "commentId")Long commentId){
-        List<DiaryComment> commentList = diaryCommentService.findAllByDiaryAndComment(postId, commentId);
-        return ResponseEntity.ok(diaryCommentService.getCommentList(commentList));
-    }
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/diary/{postId}/comment/{commentId}/recomment/{recommentId}")
