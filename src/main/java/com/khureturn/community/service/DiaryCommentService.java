@@ -55,12 +55,6 @@ public class DiaryCommentService {
         return diaryComment;
     }
 
-    public List<DiaryComment> findAllByDiary(Long diaryId){
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
-        return diaryCommentRepository.findAllByDiary(diary);
-    }
-
     @Transactional
     public void delete(Long diaryId, Long diaryCommentId){
         Diary diary = diaryRepository.findById(diaryId)
@@ -113,7 +107,7 @@ public class DiaryCommentService {
                 DiaryCommentResponseDto.ReCommentDto result = DiaryCommentResponseDto.ReCommentDto.builder()
                         .recommentId(re.getId())
                         .content(re.getDiaryCommentContent())
-                        .user(MemberResponseDto.MemberDto.builder().memberId(re.getMember().getMemberId()).profileImgURL(re.getMember().getProfileImg()).name(re.getMember().getName()).nickname(re.getMember().getNickname()).build())
+                        .user(MemberResponseDto.MemberSortDto.builder().memberId(re.getMember().getMemberId()).profileImgURL(re.getMember().getProfileImg()).name(re.getMember().getName()).nickname(re.getMember().getNickname()).build())
                         .createdDate(re.getCreatedAt())
                         .build();
                 recommentResultList.add(result);
@@ -123,20 +117,12 @@ public class DiaryCommentService {
                     .content(c.getDiaryCommentContent())
                     .recommentCount(reCommentCount)
                     .recomments(recommentResultList)
-                    .user(MemberResponseDto.MemberDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
+                    .user(MemberResponseDto.MemberSortDto.builder().memberId(member.getMemberId()).profileImgURL(member.getProfileImg()).name(member.getName()).build())
                     .createdDate(c.getCreatedAt())
                     .build();
             list.add(comment);
         }
         return list;
-    }
-
-    public List<DiaryComment> findAllByDiaryAndComment(Long diaryId, Long commentId){
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(()-> new NotFoundException("Diary를 찾을 수 없습니다."));
-        DiaryComment parent = diaryCommentRepository.findByIdAndDiary(commentId, diary);
-        List<DiaryComment> reCommentList = diaryCommentRepository.findAllByDiaryAndParent(diary, parent);
-        return reCommentList;
     }
 
     @Transactional
