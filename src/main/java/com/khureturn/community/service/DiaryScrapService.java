@@ -11,6 +11,7 @@ import com.khureturn.community.repository.DiaryScrapRepository;
 import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -22,6 +23,7 @@ public class DiaryScrapService {
     private final DiaryScrapRepository diaryScrapRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void diaryScrap(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
@@ -42,6 +44,7 @@ public class DiaryScrapService {
 
     }
 
+    @Transactional
     public void diaryUnScrap(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));

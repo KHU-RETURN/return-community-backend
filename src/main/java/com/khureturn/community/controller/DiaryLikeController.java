@@ -25,6 +25,7 @@ public class DiaryLikeController {
         return ResponseEntity.ok().build();
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<Void> deleteLike(Principal principal, @PathVariable(name = "postId")Long postId){

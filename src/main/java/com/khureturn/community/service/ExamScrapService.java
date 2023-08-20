@@ -10,6 +10,7 @@ import com.khureturn.community.repository.ExamScrapRepository;
 import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -20,6 +21,7 @@ public class ExamScrapService {
     private final ExamRepository examRepository;
     private final ExamScrapRepository examScrapRepository;
 
+    @Transactional
     public void examScrap(Long examId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
@@ -39,6 +41,7 @@ public class ExamScrapService {
 
     }
 
+    @Transactional
     public void examUnScrap(Long examId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다"));

@@ -11,6 +11,7 @@ import com.khureturn.community.repository.DiaryRepository;
 import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.security.Principal;
@@ -23,6 +24,7 @@ public class DiaryLikeService {
     private final DiaryLikeRepository diaryLikeRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void diaryLike(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
@@ -43,6 +45,8 @@ public class DiaryLikeService {
 
     }
 
+
+    @Transactional
     public void diaryUnlike(Long diaryId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다"));
@@ -56,5 +60,6 @@ public class DiaryLikeService {
         diary.decreaseLike();
 
     }
+
 
 }

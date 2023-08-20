@@ -74,11 +74,12 @@ public class ExamService {
         examRepository.deleteById(examId);
     }
 
+    @Transactional
     public ExamResponseDto.ExamDto getExam(Long examId, List<ExamFile> examFileList, Principal principal){
 
         Exam exam = examRepository.findById(examId)
                 .orElseThrow(() -> new NotFoundException("시험 정보를 찾을 수 없습니다."));
-        exam.increaseHit();
+
         Member nowMember = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Member examMember = exam.getMember();
@@ -111,6 +112,7 @@ public class ExamService {
                 result.setFileList(urlList);
             }
         }
+        exam.increaseHit();
 
         return result;
     }
