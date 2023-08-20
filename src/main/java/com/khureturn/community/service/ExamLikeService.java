@@ -10,6 +10,7 @@ import com.khureturn.community.repository.ExamRepository;
 import com.khureturn.community.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -21,6 +22,7 @@ public class ExamLikeService {
     private final ExamRepository examRepository;
     private final ExamLikeRepository examLikeRepository;
 
+    @Transactional
     public void examLike(Long examId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
@@ -40,6 +42,7 @@ public class ExamLikeService {
 
     }
 
+    @Transactional
     public void examUnlike(Long examId, Principal principal){
         Member member = memberRepository.findByGoogleSub(principal.getName())
                 .orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다"));

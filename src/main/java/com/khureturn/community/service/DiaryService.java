@@ -72,8 +72,8 @@ public class DiaryService{
         return diary;
     }
 
+    @Transactional
     public DiaryResponseDto.DiaryDto findDiary(Diary diary, DiaryFile diaryFile, Principal principal){
-        diary.increaseHit();
         Member nowMember = memberRepository.findByGoogleSub(principal.getName()).orElseThrow(()-> new NotFoundException("유저를 찾을 수 없습니다."));
         Member diaryMember = diary.getMember();
         Boolean isLiked = diaryLikeRepository.existsDiaryLikeByMemberAndDiary(nowMember, diary);
@@ -100,6 +100,7 @@ public class DiaryService{
             List<String> list = Arrays.asList(url.split(","));
             result.setMediaList(list);
         }
+        diary.increaseHit();
         return result;
     }
 
