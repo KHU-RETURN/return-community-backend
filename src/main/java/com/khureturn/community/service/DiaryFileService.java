@@ -27,26 +27,27 @@ public class DiaryFileService {
         String rootPath = System.getProperty("user.dir") + "/src/main/webapp/WEB-INF";
         String fileDir = "/static/thumbnailDiaryMedia";
         String filePath = rootPath + fileDir;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         MediaType mediaType;
-        String extension = Objects.requireNonNull(media.getOriginalFilename()).substring(media.getOriginalFilename().lastIndexOf(".")+1);
-        if(extension.equals("png") || extension.equals("jpeg") || extension.equals("gif") || extension.equals("jpg") || extension.equals("PNG") || extension.equals("JPEG") || extension.equals("GIF") || extension.equals("JPG")){
+        String extension = Objects.requireNonNull(media.getOriginalFilename()).substring(media.getOriginalFilename().lastIndexOf(".") + 1);
+        if (extension.equals("png") || extension.equals("jpeg") || extension.equals("gif") || extension.equals("jpg") || extension.equals("PNG") || extension.equals("JPEG") || extension.equals("GIF") || extension.equals("JPG")) {
             mediaType = MediaType.IMAGE;
-        } else{
+        } else {
             mediaType = MediaType.VIDEO;
         }
         UUID uuid = UUID.randomUUID();
-        String savedMediaName = uuid.toString() +"_" +media.getOriginalFilename();
+        String savedMediaName = uuid.toString() + "_" + media.getOriginalFilename();
         File saveMedia = new File(filePath, savedMediaName);
-        if(!saveMedia.exists()){
-            saveMedia.mkdirs();
-        }
         media.transferTo(saveMedia);
+
         DiaryFile diaryFile = DiaryFile.builder()
                 .mediaType(mediaType)
                 .diaryOriginalUrl(fileDir + "/" + savedMediaName)
                 .diary(diary)
                 .build();
-
         return diaryFile;
     }
     public DiaryFile findByDiary(Long diaryId){

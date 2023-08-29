@@ -11,6 +11,7 @@ import com.khureturn.community.dto.converter.JacksonUtil;
 import com.khureturn.community.exception.NotFoundException;
 import com.khureturn.community.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DiaryService{
 
@@ -47,8 +49,10 @@ public class DiaryService{
         Diary diary = DiaryConverter.toDiary(request, member);
         diaryRepository.save(diary);
         for(MultipartFile media: mediaList){
-            DiaryFile diaryFile = DiaryFileService.fileUpload(media, diary);
-            diaryFileRepository.save(diaryFile);
+            if(!media.getOriginalFilename().isEmpty()){
+                DiaryFile diaryFile = DiaryFileService.fileUpload(media, diary);
+                diaryFileRepository.save(diaryFile);
+            }
         }
         return diary;
     }
